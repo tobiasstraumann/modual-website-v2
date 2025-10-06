@@ -1,0 +1,532 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>modual - Swiss Made Batteriespeicher</title>
+    <meta name="description" content="Nachhaltige, skalierbare Batteriespeicher-Lösungen aus der Schweiz. Second Life Batterien für eine grüne Zukunft.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="logo">
+                <img src="https://modual.ch/wp-content/uploads/2024/03/cropped-Modual-Logos-FULL_X-SPACE.webp" alt="modual Logo" height="40">
+            </div>
+            <ul class="nav-menu">
+                <li><a href="#produkte">Produkte</a></li>
+                <li><a href="#features">Features</a></li>
+                <li><a href="#nachhaltigkeit">Nachhaltigkeit</a></li>
+                <li><a href="#2ndlife">2ndLife</a></li>
+                <li><a href="#faq">FAQ</a></li>
+                <li><a href="#kontakt" class="nav-cta">Kontakt</a></li>
+            </ul>
+            <div class="hamburger">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <video class="hero-video" autoplay muted loop playsinline>
+            <source src="assets/video/20250930_1544_New Video_simple_compose_01k6ddw4ghfgb8nqen3v1w2zav.mp4" type="video/mp4">
+        </video>
+        <div class="hero-overlay"></div>
+        <div class="hero-content">
+            <h1 class="hero-title">
+                <span class="reveal-text">Energie speichern.</span>
+                <span class="reveal-text">Zukunft gestalten.</span>
+            </h1>
+            <p class="hero-subtitle reveal-fade">
+                Swiss Made Batteriespeicher für eine nachhaltige Energiewende
+            </p>
+            <div class="hero-cta reveal-fade">
+                <a href="#produkte" class="btn btn-primary">Produkte entdecken</a>
+                <a href="#kontakt" class="btn btn-secondary">Beratung anfragen</a>
+            </div>
+        </div>
+        <div class="scroll-indicator">
+            <span>Scroll</span>
+            <div class="scroll-line"></div>
+        </div>
+    </section>
+
+    <!-- USPs Section -->
+    <section class="usps">
+        <div class="container">
+            <div class="usp-grid">
+                <div class="usp-card" data-color="yellow">
+                    <div class="usp-icon">🇨🇭</div>
+                    <h3>Swiss Made</h3>
+                    <p>Höchste Qualitätsstandards aus der Schweiz</p>
+                </div>
+                <div class="usp-card" data-color="blue">
+                    <div class="usp-icon">♻️</div>
+                    <h3>Second Life</h3>
+                    <p>Nachhaltigkeit durch Wiederverwendung</p>
+                </div>
+                <div class="usp-card" data-color="green">
+                    <div class="usp-icon">📊</div>
+                    <h3>Live Monitoring</h3>
+                    <p>Echtzeit-Überwachung Ihrer Energie</p>
+                </div>
+                <div class="usp-card" data-color="yellow">
+                    <div class="usp-icon">⚡</div>
+                    <h3>Skalierbar</h3>
+                    <p>Modular erweiterbar nach Ihren Bedürfnissen</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Products Section -->
+    <section id="produkte" class="products">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-tag">Produkte</span>
+                <h2>Der Nutzen eines Batteriespeichers</h2>
+                <p>Tag laden, Nacht entladen - intelligent und effizient</p>
+            </div>
+            
+            <!-- Interactive Energy Chart -->
+            <div class="energy-chart-container">
+                <div class="chart-header">
+                    <h3>24-Stunden Energiefluss</h3>
+                    <div class="chart-controls">
+                        <button class="chart-btn" id="playChart">▶ Abspielen</button>
+                        <button class="chart-btn" id="pauseChart">⏸ Pause</button>
+                        <button class="chart-btn" id="resetChart">↻ Zurücksetzen</button>
+                    </div>
+                </div>
+                <div class="energy-chart">
+                    <canvas id="energyCanvas" width="1000" height="400"></canvas>
+                    <div class="chart-legend">
+                        <div class="legend-item">
+                            <span class="legend-color" style="background: var(--power-yellow);"></span>
+                            <span>Solarproduktion</span>
+                        </div>
+                        <div class="legend-item">
+                            <span class="legend-color" style="background: var(--electric-blue);"></span>
+                            <span>Batterie Ladung</span>
+                        </div>
+                        <div class="legend-item">
+                            <span class="legend-color" style="background: var(--green);"></span>
+                            <span>Verbrauch</span>
+                        </div>
+                    </div>
+                    <div class="time-indicator">
+                        <span id="currentTime">00:00</span>
+                        <span id="timeOfDay">🌙 Nacht</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="product-showcase">
+                <div class="product-visual">
+                    <img src="assets/images/modual_basic_dc_1x3_isolated_v01-Back_side_close.png" alt="modual Batteriespeicher" class="product-image">
+                    <div class="product-badge">Swiss Quality</div>
+                </div>
+                <div class="product-features">
+                    <div class="feature-item">
+                        <h4>Energieunabhängigkeit</h4>
+                        <p>Nutzen Sie Ihre selbst erzeugte Solarenergie auch nachts</p>
+                    </div>
+                    <div class="feature-item">
+                        <h4>Kosteneffizienz</h4>
+                        <p>Reduzieren Sie Ihre Stromkosten durch intelligentes Energiemanagement</p>
+                    </div>
+                    <div class="feature-item">
+                        <h4>Netzstabilität</h4>
+                        <p>Tragen Sie zur Stabilisierung des Stromnetzes bei</p>
+                    </div>
+                    <div class="feature-item">
+                        <h4>Notstromversorgung</h4>
+                        <p>Sichern Sie sich ab bei Stromausfällen</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Top Features Section -->
+    <section id="features" class="features">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-tag">Features</span>
+                <h2>Top Features</h2>
+            </div>
+            <div class="features-grid">
+                <div class="feature-card large">
+                    <div class="feature-content">
+                        <h3>Modular und skalierbar</h3>
+                        <p>Erweitern Sie Ihre Speicherkapazität jederzeit nach Bedarf. Unser modulares System wächst mit Ihren Anforderungen.</p>
+                        <a href="#" class="feature-link">Mehr erfahren →</a>
+                    </div>
+                    <div class="feature-graphic"></div>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-content">
+                        <h3>Einfache Installation</h3>
+                        <p>Plug & Play Installation durch zertifizierte Partner</p>
+                    </div>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-content">
+                        <h3>Smart Monitoring</h3>
+                        <p>Behalten Sie Ihren Energiefluss in Echtzeit im Blick</p>
+                    </div>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-content">
+                        <h3>Schweizer Support</h3>
+                        <p>Persönliche Betreuung auf Deutsch - nah und erreichbar</p>
+                    </div>
+                </div>
+                <div class="feature-card large">
+                    <div class="feature-content">
+                        <h3>Intelligentes Energiemanagement</h3>
+                        <p>KI-gestützte Optimierung für maximale Effizienz und Kosteneinsparung</p>
+                        <a href="#" class="feature-link">Details ansehen →</a>
+                    </div>
+                    <div class="feature-graphic"></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 2nd Life Section -->
+    <section id="2ndlife" class="second-life">
+        <div class="container">
+            <div class="second-life-content">
+                <div class="second-life-text">
+                    <span class="section-tag green">Nachhaltigkeit</span>
+                    <h2>2ndLife<br>Nachhaltige Batteriespeicher</h2>
+                    <p class="large-text">Geben Sie gebrauchten Batterien ein zweites Leben und schonen Sie dabei wertvolle Ressourcen</p>
+                    <div class="second-life-features">
+                        <div class="sl-feature">
+                            <h4>Ressourcen schonend</h4>
+                            <p>Second-Life Batterien verlängern den Lebenszyklus wertvoller Ressourcen</p>
+                        </div>
+                        <div class="sl-feature">
+                            <h4>USPs Nachhaltigkeit</h4>
+                            <p>Produkt, bms, swissness, support - alles aus einer Hand</p>
+                        </div>
+                        <div class="sl-feature">
+                            <h4>Grundeinstellung DEUTSCH!</h4>
+                            <p>Wir sprechen Ihre Sprache und verstehen Ihre Bedürfnisse</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="second-life-visual">
+                    <img src="assets/images/IMG_3814.jpg" alt="modual Batteriespeicher Second Life" class="second-life-image">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Use Cases Section -->
+    <section class="use-cases">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-tag">Anwendungen</span>
+                <h2>Usecase + Produkte</h2>
+                <p class="subtitle">Eigenbedarf/Optimierung (Grid), Dank Second-Life: massgeschneiderte Lösungen</p>
+            </div>
+            <div class="use-case-grid">
+                <div class="use-case-card">
+                    <div class="use-case-image">
+                        <div class="placeholder-icon">🏠</div>
+                    </div>
+                    <div class="use-case-content">
+                        <h3>Eigenheim</h3>
+                        <p>Maximieren Sie Ihre Solarenergie-Nutzung und werden Sie energieunabhängig</p>
+                        <a href="#">Mehr erfahren →</a>
+                    </div>
+                </div>
+                <div class="use-case-card">
+                    <div class="use-case-image">
+                        <div class="placeholder-icon">🏢</div>
+                    </div>
+                    <div class="use-case-content">
+                        <h3>Gewerbe</h3>
+                        <p>Optimieren Sie Ihre Energiekosten durch intelligentes Peak-Shaving</p>
+                        <a href="#">Mehr erfahren →</a>
+                    </div>
+                </div>
+                <div class="use-case-card">
+                    <div class="use-case-image">
+                        <div class="placeholder-icon">🏭</div>
+                    </div>
+                    <div class="use-case-content">
+                        <h3>Industrie</h3>
+                        <p>Skalierbare Lösungen für hohe Energiebedarfe</p>
+                        <a href="#">Mehr erfahren →</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Quality Section -->
+    <section class="quality">
+        <div class="container-wide">
+            <div class="quality-hero">
+                <div class="quality-text">
+                    <h2>Swiss Quality</h2>
+                    <p class="large-text">Produkt-Fokus -> auf den ersten Blick ersichtlich, es geht um einen nachhaltigen Batteriespeicher</p>
+                    <ul class="quality-list">
+                        <li>Entwickelt und gefertigt in der Schweiz</li>
+                        <li>Höchste Sicherheitsstandards</li>
+                        <li>Langlebigkeit und Zuverlässigkeit</li>
+                        <li>Direkter Support vom Hersteller</li>
+                    </ul>
+                </div>
+                <div class="quality-badge-large">
+                    <svg viewBox="0 0 200 200">
+                        <circle cx="100" cy="100" r="90" fill="#2e5efc"/>
+                        <text x="100" y="100" text-anchor="middle" dominant-baseline="middle" fill="white" font-size="60" font-family="Montserrat" font-weight="700">🇨🇭</text>
+                        <text x="100" y="160" text-anchor="middle" fill="white" font-size="16" font-family="Montserrat" font-weight="600">SWISS MADE</text>
+                    </svg>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section class="about">
+        <div class="container">
+            <div class="about-content">
+                <div class="about-text">
+                    <span class="section-tag">Über uns</span>
+                    <h2>Innovation trifft Nachhaltigkeit</h2>
+                    <p>modual wurde gegründet, um die Energiewende aktiv mitzugestalten. Wir glauben an eine Zukunft, in der nachhaltige Energiespeicherung für jeden zugänglich ist.</p>
+                    <div class="about-features">
+                        <div class="about-feature">
+                            <h4>Unsere Mission</h4>
+                            <p>Nachhaltige, bezahlbare Batteriespeicher für alle</p>
+                        </div>
+                        <div class="about-feature">
+                            <h4>Unsere Vision</h4>
+                            <p>Eine Welt, in der jeder seine Energie selbst kontrolliert</p>
+                        </div>
+                        <div class="about-feature">
+                            <h4>Unser Versprechen</h4>
+                            <p>Swiss Quality, Schweizer Support, nachhaltiges Handeln</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Info Sections -->
+    <section class="info-sections">
+        <div class="container">
+            <div class="info-grid">
+                <div class="info-card">
+                    <h3>Modual-Wiki</h3>
+                    <p>FAQ: technische Daten, verfügbarkeiten, kompatibilitäten, wechselrichter, brandschutz</p>
+                    <a href="#" class="btn btn-outline">Zum Wiki →</a>
+                </div>
+                <div class="info-card">
+                    <h3>Service & Support</h3>
+                    <p>Ansprechpartner, Verkauf etc. - Direkte Nummer für schnelle Hilfe</p>
+                    <a href="#" class="btn btn-outline">Kontakt aufnehmen →</a>
+                </div>
+                <div class="info-card">
+                    <h3>Was bedeutet Secondlife?</h3>
+                    <p>Eine Erklärung unserer nachhaltigen Philosophie und Technologie</p>
+                    <a href="#" class="btn btn-outline">Mehr erfahren →</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Testimonials Section -->
+    <section class="testimonials">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-tag">Testimonials</span>
+                <h2>Was unsere Kunden sagen</h2>
+            </div>
+            <div class="testimonial-slider">
+                <div class="testimonial-card">
+                    <p class="testimonial-text">"Seit der Installation des modual Batteriespeichers sind unsere Stromkosten um 60% gesunken. Die Schweizer Qualität überzeugt!"</p>
+                    <div class="testimonial-author">
+                        <strong>Familie Müller</strong>
+                        <span>Eigenheim in Zürich</span>
+                    </div>
+                </div>
+                <div class="testimonial-card">
+                    <p class="testimonial-text">"Der Support ist hervorragend. Bei Fragen erreiche ich immer jemanden auf Deutsch, der mir kompetent weiterhilft."</p>
+                    <div class="testimonial-author">
+                        <strong>Markus Schmidt</strong>
+                        <span>Gewerbebetrieb in Bern</span>
+                    </div>
+                </div>
+                <div class="testimonial-card">
+                    <p class="testimonial-text">"Nachhaltig, zuverlässig und made in Switzerland - genau das, was wir gesucht haben!"</p>
+                    <div class="testimonial-author">
+                        <strong>Sarah Weber</strong>
+                        <span>Einfamilienhaus in Basel</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FAQ Section -->
+    <section id="faq" class="faq">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-tag">FAQ</span>
+                <h2>Häufig gestellte Fragen</h2>
+            </div>
+            <div class="faq-list">
+                <div class="faq-item">
+                    <button class="faq-question">
+                        <span>Wie funktioniert ein Batteriespeicher?</span>
+                        <span class="faq-icon">+</span>
+                    </button>
+                    <div class="faq-answer">
+                        <p>Ein Batteriespeicher speichert überschüssige Energie aus Ihrer Solaranlage und stellt sie zur Verfügung, wenn Sie sie benötigen - zum Beispiel nachts oder bei schlechtem Wetter.</p>
+                    </div>
+                </div>
+                <div class="faq-item">
+                    <button class="faq-question">
+                        <span>Was bedeutet "Second Life"?</span>
+                        <span class="faq-icon">+</span>
+                    </button>
+                    <div class="faq-answer">
+                        <p>Second Life bedeutet, dass wir Batterien verwenden, die bereits einen ersten Lebenszyklus (z.B. in Elektrofahrzeugen) hinter sich haben. Diese haben noch 70-80% ihrer Kapazität und eignen sich perfekt für stationäre Speicheranwendungen.</p>
+                    </div>
+                </div>
+                <div class="faq-item">
+                    <button class="faq-question">
+                        <span>Wie lange dauert die Installation?</span>
+                        <span class="faq-icon">+</span>
+                    </button>
+                    <div class="faq-answer">
+                        <p>Die Installation durch unsere zertifizierten Partner dauert in der Regel 1-2 Tage, je nach Komplexität Ihrer Anlage.</p>
+                    </div>
+                </div>
+                <div class="faq-item">
+                    <button class="faq-question">
+                        <span>Ist mein Wechselrichter kompatibel?</span>
+                        <span class="faq-icon">+</span>
+                    </button>
+                    <div class="faq-answer">
+                        <p>Unsere Batteriespeicher sind mit den meisten gängigen Wechselrichtern kompatibel. Kontaktieren Sie uns für eine individuelle Kompatibilitätsprüfung.</p>
+                    </div>
+                </div>
+                <div class="faq-item">
+                    <button class="faq-question">
+                        <span>Welche Garantie gibt es?</span>
+                        <span class="faq-icon">+</span>
+                    </button>
+                    <div class="faq-answer">
+                        <p>Wir bieten eine umfassende Herstellergarantie auf unsere Batteriespeicher. Details zur Garantiedauer und -umfang erhalten Sie bei der Beratung.</p>
+                    </div>
+                </div>
+                <div class="faq-item">
+                    <button class="faq-question">
+                        <span>Zu erfahren was unsere Produkte von den Mitbewerbern abhebt</span>
+                        <span class="faq-icon">+</span>
+                    </button>
+                    <div class="faq-answer">
+                        <p>Wir kombinieren Swiss Made Qualität mit Nachhaltigkeit durch Second Life Batterien, bieten persönlichen Schweizer Support und modulare, skalierbare Lösungen - alles aus einer Hand.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section id="kontakt" class="cta-section">
+        <div class="container">
+            <div class="cta-content">
+                <h2>Ein Preis - Zu kaufen bei Krannich etc</h2>
+                <p class="large-text">Bereit für Ihre eigene Energielösung?</p>
+                <div class="cta-buttons">
+                    <a href="#" class="btn btn-primary-large">Jetzt Beratung anfragen</a>
+                    <a href="#" class="btn btn-secondary-large">Produktübersicht</a>
+                </div>
+                <div class="cta-info">
+                    <p>Oder kontaktieren Sie uns direkt:</p>
+                    <div class="contact-methods">
+                        <a href="tel:+41412440550">📞 +41 41 244 05 50</a>
+                        <a href="mailto:info@modual.ch">✉️ info@modual.ch</a>
+                    </div>
+                    <p style="margin-top: 1rem; font-size: 0.9rem; opacity: 0.9;">Mo-Fr 09:00 - 17:00</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-col">
+                    <div class="footer-logo">
+                        <img src="assets/images/Modual Logos-YELLOW.png" alt="modual Logo" height="50">
+                    </div>
+                    <p>Swiss Made Batteriespeicher für eine nachhaltige Zukunft</p>
+                    <div style="margin-top: 1rem; font-size: 0.9rem; line-height: 1.6;">
+                        <strong>modual AG</strong><br>
+                        Seewenstrasse 13<br>
+                        CH-6440 Brunnen<br>
+                        Switzerland<br>
+                        <a href="mailto:info@modual.ch" style="color: rgba(255, 255, 255, 0.7);">info@modual.ch</a><br>
+                        <a href="tel:+41412440550" style="color: rgba(255, 255, 255, 0.7);">+41 41 244 05 50</a><br>
+                        <small>Mo-Fr 09:00 - 17:00</small>
+                    </div>
+                </div>
+                <div class="footer-col">
+                    <h4>Produkte</h4>
+                    <ul>
+                        <li><a href="#">Second Life</a></li>
+                        <li><a href="#">Zubehör</a></li>
+                        <li><a href="#">Monitoring</a></li>
+                    </ul>
+                </div>
+                <div class="footer-col">
+                    <h4>Unternehmen</h4>
+                    <ul>
+                        <li><a href="#">Über uns</a></li>
+                        <li><a href="#">Nachhaltigkeit</a></li>
+                        <li><a href="#">Karriere</a></li>
+                        <li><a href="#">Presse</a></li>
+                    </ul>
+                </div>
+                <div class="footer-col">
+                    <h4>Support</h4>
+                    <ul>
+                        <li><a href="#">FAQ</a></li>
+                        <li><a href="#">Dokumentation</a></li>
+                        <li><a href="#">Kontakt</a></li>
+                        <li><a href="#">Partner</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2025 modual. Alle Rechte vorbehalten.</p>
+                <div class="footer-links">
+                    <a href="#">Datenschutz</a>
+                    <a href="#">Impressum</a>
+                    <a href="#">AGB</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>
