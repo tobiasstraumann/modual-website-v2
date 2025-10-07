@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>modual - Swiss Made Batteriespeicher</title>
     <meta name="description" content="Nachhaltige, skalierbare Batteriespeicher-Lösungen aus der Schweiz. Second Life Batterien für eine grüne Zukunft.">
+    <link rel="icon" type="image/svg+xml" href="assets/images/Modual Logos-09.svg">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
@@ -171,7 +172,7 @@
                                         <p>Finden Sie kompatible & modual zertifizierte Geräte</p>
                                     </div>
                                 </a>
-                                <a href="#" class="megamenu-item">
+                                <a href="installateure.html" class="megamenu-item">
                                     <div class="megamenu-icon">
                                         <i data-feather="award"></i>
                                     </div>
@@ -411,6 +412,9 @@
                 <span class="section-tag">Innovation</span>
                 <h2>Eine nachhaltige Energiezukunft</h2>
                 <p class="vision-text">Eine nachhaltige Energiezukunft, in der Energiespeicher ohne Abbau neuer Rohstoffe auskommen.</p>
+                <div class="innovation-image" style="margin-top: 2rem; border-radius: 16px; overflow: hidden; max-width: 900px; margin-left: auto; margin-right: auto;">
+                    <img src="assets/images/ricardo-resende--dRdt3nR8ro-unsplash.jpeg" alt="Nachhaltige Energiezukunft" style="width: 100%; height: auto; display: block;">
+                </div>
             </div>
             <div class="section-header" style="margin-top: 3rem;">
                 <span class="section-tag">Features</span>
@@ -473,7 +477,7 @@
                             <p>Produkt, bms, swissness, support - alles aus einer Hand</p>
                         </div>
                         <div class="sl-feature">
-                            <h4>Grundeinstellung DEUTSCH!</h4>
+                            <h4>Vielsprachig</h4>
                             <p>Wir sprechen Ihre Sprache und verstehen Ihre Bedürfnisse</p>
                         </div>
                     </div>
@@ -489,6 +493,9 @@
     <section class="quality">
         <div class="container-wide">
             <div class="quality-hero">
+                <div class="quality-image" style="max-width: 500px;">
+                    <img src="assets/images/DSC00468.jpg" alt="Swiss Quality Production" style="width: 100%; height: auto; border-radius: 16px; box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);">
+                </div>
                 <div class="quality-text">
                     <h2>Swiss Quality</h2>
                     <p class="large-text">Kommen Sie uns besuchen in unserer Produktion in Brunnen (Schwyz)</p>
@@ -498,13 +505,6 @@
                         <li>Langlebigkeit und Zuverlässigkeit</li>
                         <li>Direkter Support vom Hersteller</li>
                     </ul>
-                </div>
-                <div class="quality-badge-large">
-                    <svg viewBox="0 0 200 200">
-                        <circle cx="100" cy="100" r="90" fill="#2e5efc"/>
-                        <text x="100" y="100" text-anchor="middle" dominant-baseline="middle" fill="white" font-size="60" font-family="Montserrat" font-weight="700">🇨🇭</text>
-                        <text x="100" y="160" text-anchor="middle" fill="white" font-size="16" font-family="Montserrat" font-weight="600">SWISS MADE</text>
-                    </svg>
                 </div>
             </div>
         </div>
@@ -659,7 +659,7 @@
     </section>
 
     <!-- CTA Section -->
-    <section class="cta-section">
+    <section id="kontakt" class="cta-section">
         <div class="container">
             <div class="cta-content">
                 <h2>Bereit für nachhaltige Energie?</h2>
@@ -692,7 +692,7 @@
     </section>
 
     <!-- Contact Form Section -->
-    <section id="kontakt" class="contact-form-section">
+    <section class="contact-form-section">
         <div class="contact-form-container">
             <div class="contact-form-wrapper">
                 <div class="contact-form-header">
@@ -727,12 +727,16 @@
                     <p>Oder rufen Sie uns direkt an</p>
                     <div class="contact-methods-inline">
                         <a href="tel:+41412440550"><i data-feather="phone"></i> +41 41 244 05 50</a>
-                        <a href="mailto:info@modual.ch"><i data-feather="mail"></i> info@modual.ch</a>
                     </div>
-                    <p class="contact-hours">Mo-Fr 09:00 - 17:00</p>
+                    <p class="contact-hours">Mo-Do 09:00 - 17:00<br>Fr 09:00 - 15:00</p>
                     <div class="emergency-contact">
-                        <p class="emergency-label">Installationsnotfall</p>
-                        <a href="tel:+41412440555" class="emergency-number"><i data-feather="alert-circle"></i> +41 41 244 05 55</a>
+                        <p class="emergency-label">Installationsnotfall?</p>
+                        <button class="emergency-toggle" id="emergencyToggle">
+                            <i data-feather="alert-circle"></i> Notfallnummer anzeigen
+                        </button>
+                        <a href="tel:+41412440555" class="emergency-number" id="emergencyNumber" style="display: none;">
+                            <i data-feather="phone"></i> +41 41 244 05 55
+                        </a>
                     </div>
                 </div>
             </div>
@@ -753,9 +757,8 @@
                         Seewenstrasse 13<br>
                         CH-6440 Brunnen<br>
                         Switzerland<br>
-                        <a href="mailto:info@modual.ch" style="color: rgba(255, 255, 255, 0.7);">info@modual.ch</a><br>
                         <a href="tel:+41412440550" style="color: rgba(255, 255, 255, 0.7);">+41 41 244 05 50</a><br>
-                        <small>Mo-Fr 09:00 - 17:00</small>
+                        <small>Mo-Do 09:00 - 17:00, Fr 09:00 - 15:00</small>
                     </div>
                     <div class="social-media-links">
                         <a href="https://www.linkedin.com/company/modual-ag/" target="_blank" rel="noopener" aria-label="LinkedIn">

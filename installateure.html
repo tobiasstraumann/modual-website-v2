@@ -1,0 +1,504 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Zertifizierte Installateure - modual</title>
+    <link rel="icon" type="image/svg+xml" href="assets/images/Modual Logos-09.svg">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <script src="https://unpkg.com/feather-icons"></script>
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="logo">
+                <a href="index.html">
+                    <img src="https://modual.ch/wp-content/uploads/2024/03/cropped-Modual-Logos-FULL_X-SPACE.webp" alt="modual Logo" height="40">
+                </a>
+            </div>
+            <ul class="nav-menu">
+                <li class="has-megamenu">
+                    <a href="index.html#produkte" class="megamenu-trigger">Produkte</a>
+                    <div class="megamenu">
+                        <div class="megamenu-content">
+                            <div class="megamenu-section-title">AC-Speicher (mit Inverter)</div>
+                            <div class="megamenu-grid">
+                                <a href="https://modual.ch/product/11-5-kwh-energy-capacity-system-with-inverter/" class="megamenu-item" target="_blank">
+                                    <div class="megamenu-icon">
+                                        <i data-feather="battery-charging"></i>
+                                    </div>
+                                    <div class="megamenu-text">
+                                        <h4>11.5 kWh AC-Speicher</h4>
+                                        <p>Kompakte Lösung mit integriertem Wechselrichter</p>
+                                    </div>
+                                </a>
+                                <a href="https://modual.ch/product/23-kwh-energy-capacity-solution-with-inverter/" class="megamenu-item" target="_blank">
+                                    <div class="megamenu-icon">
+                                        <i data-feather="battery-charging"></i>
+                                    </div>
+                                    <div class="megamenu-text">
+                                        <h4>23 kWh AC-Speicher</h4>
+                                        <p>Ideal für Einfamilienhäuser</p>
+                                    </div>
+                                </a>
+                                <a href="https://modual.ch/product/34-kwh-energy-capacity-solution-with-inverter/" class="megamenu-item" target="_blank">
+                                    <div class="megamenu-icon">
+                                        <i data-feather="battery-charging"></i>
+                                    </div>
+                                    <div class="megamenu-text">
+                                        <h4>34 kWh AC-Speicher</h4>
+                                        <p>Erweiterte Kapazität für höheren Bedarf</p>
+                                    </div>
+                                </a>
+                                <a href="https://modual.ch/product/46-kwh-energy-capacity-solution-with-inverter/" class="megamenu-item" target="_blank">
+                                    <div class="megamenu-icon">
+                                        <i data-feather="battery-charging"></i>
+                                    </div>
+                                    <div class="megamenu-text">
+                                        <h4>46 kWh AC-Speicher</h4>
+                                        <p>Maximale Kapazität für große Haushalte</p>
+                                    </div>
+                                </a>
+                            </div>
+                            
+                            <div class="megamenu-section-title" style="margin-top: 2rem;">DC-Speicher</div>
+                            <div class="megamenu-grid">
+                                <a href="https://modual.ch/product/11-5-kwh-energy-capacity/" class="megamenu-item" target="_blank">
+                                    <div class="megamenu-icon">
+                                        <i data-feather="battery"></i>
+                                    </div>
+                                    <div class="megamenu-text">
+                                        <h4>11.5 kWh DC-Speicher</h4>
+                                        <p>Kompakt und effizient</p>
+                                    </div>
+                                </a>
+                                <a href="https://modual.ch/product/23-kwh-energy-capacity/" class="megamenu-item" target="_blank">
+                                    <div class="megamenu-icon">
+                                        <i data-feather="battery"></i>
+                                    </div>
+                                    <div class="megamenu-text">
+                                        <h4>23 kWh DC-Speicher</h4>
+                                        <p>Optimale Größe für neue PV-Anlagen</p>
+                                    </div>
+                                </a>
+                                <a href="https://modual.ch/product/34-kwh-energy-capacity/" class="megamenu-item" target="_blank">
+                                    <div class="megamenu-icon">
+                                        <i data-feather="battery"></i>
+                                    </div>
+                                    <div class="megamenu-text">
+                                        <h4>34 kWh DC-Speicher</h4>
+                                        <p>Erweiterte Speicherkapazität</p>
+                                    </div>
+                                </a>
+                                <a href="https://modual.ch/product/46-kwh-energy-capacity/" class="megamenu-item" target="_blank">
+                                    <div class="megamenu-icon">
+                                        <i data-feather="battery"></i>
+                                    </div>
+                                    <div class="megamenu-text">
+                                        <h4>46 kWh DC-Speicher</h4>
+                                        <p>Hohe Kapazität für anspruchsvolle Anwendungen</p>
+                                    </div>
+                                </a>
+                            </div>
+                            
+                            <div class="megamenu-footer">
+                                <a href="https://modual.ch/product-portfolio/" target="_blank" class="megamenu-view-all">
+                                    Alle Produkte ansehen <i data-feather="arrow-right"></i>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </li>
+                <li><a href="index.html#2ndlife">Second-Life</a></li>
+                <li class="has-megamenu">
+                    <a href="#" class="megamenu-trigger">Hilfe & Ressourcen</a>
+                    <div class="megamenu">
+                        <div class="megamenu-content">
+                            <div class="megamenu-grid">
+                                <a href="https://modual.ch/news/" class="megamenu-item" target="_blank">
+                                    <div class="megamenu-icon">
+                                        <i data-feather="file-text"></i>
+                                    </div>
+                                    <div class="megamenu-text">
+                                        <h4>modual Blog</h4>
+                                        <p>Artikel zu Referenzen und News aus der Branche</p>
+                                    </div>
+                                </a>
+                                <a href="https://modual.ch/resources/" class="megamenu-item" target="_blank">
+                                    <div class="megamenu-icon">
+                                        <i data-feather="book-open"></i>
+                                    </div>
+                                    <div class="megamenu-text">
+                                        <h4>Wissensdatenbank</h4>
+                                        <p>Ihre digitale Erste-Hilfe-Seite</p>
+                                    </div>
+                                </a>
+                                <a href="https://configurator.modual.ch/configurator.html?lang=de" class="megamenu-item" target="_blank">
+                                    <div class="megamenu-icon">
+                                        <i data-feather="zap"></i>
+                                    </div>
+                                    <div class="megamenu-text">
+                                        <h4>Photovoltaik-Speicherrechner</h4>
+                                        <p>Berechnen Sie die Effizienz und Größe Ihres Systems</p>
+                                    </div>
+                                </a>
+                                <a href="#" class="megamenu-item">
+                                    <div class="megamenu-icon">
+                                        <i data-feather="dollar-sign"></i>
+                                    </div>
+                                    <div class="megamenu-text">
+                                        <h4>Förderungen ansehen</h4>
+                                        <p>Finden Sie passende Fördermöglichkeiten für Ihr Projekt</p>
+                                    </div>
+                                </a>
+                                <a href="#" class="megamenu-item">
+                                    <div class="megamenu-icon">
+                                        <i data-feather="video"></i>
+                                    </div>
+                                    <div class="megamenu-text">
+                                        <h4>Webinare</h4>
+                                        <p>Informationen über digitale Produkte</p>
+                                    </div>
+                                </a>
+                                <a href="#" class="megamenu-item">
+                                    <div class="megamenu-icon">
+                                        <i data-feather="link"></i>
+                                    </div>
+                                    <div class="megamenu-text">
+                                        <h4>Kompatible Geräteliste</h4>
+                                        <p>Finden Sie kompatible & modual zertifizierte Geräte</p>
+                                    </div>
+                                </a>
+                                <a href="installateure.html" class="megamenu-item active">
+                                    <div class="megamenu-icon">
+                                        <i data-feather="award"></i>
+                                    </div>
+                                    <div class="megamenu-text">
+                                        <h4>Zertifizierte Installateure</h4>
+                                        <p>Finden Sie qualifizierte Partner in Ihrer Nähe</p>
+                                    </div>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </li>
+                <li class="has-megamenu">
+                    <a href="#" class="megamenu-trigger">Über uns</a>
+                    <div class="megamenu">
+                        <div class="megamenu-content">
+                            <div class="megamenu-grid">
+                                <a href="https://modual.ch/about-us/" class="megamenu-item" target="_blank">
+                                    <div class="megamenu-icon">
+                                        <i data-feather="users"></i>
+                                    </div>
+                                    <div class="megamenu-text">
+                                        <h4>Wir sind Modual</h4>
+                                        <p>Erfahren Sie mehr über unser Team und unsere Vision</p>
+                                    </div>
+                                </a>
+                                <a href="https://modual.ch/sustainability/" class="megamenu-item" target="_blank">
+                                    <div class="megamenu-icon">
+                                        <i data-feather="globe"></i>
+                                    </div>
+                                    <div class="megamenu-text">
+                                        <h4>Nachhaltigkeit</h4>
+                                        <p>Unsere Verantwortung für eine grüne Zukunft</p>
+                                    </div>
+                                </a>
+                                <a href="https://modual.ch/news/" class="megamenu-item" target="_blank">
+                                    <div class="megamenu-icon">
+                                        <i data-feather="rss"></i>
+                                    </div>
+                                    <div class="megamenu-text">
+                                        <h4>Blog</h4>
+                                        <p>Aktuelle News und Insights aus der Branche</p>
+                                    </div>
+                                </a>
+                                <a href="https://modual.ch/events/" class="megamenu-item" target="_blank">
+                                    <div class="megamenu-icon">
+                                        <i data-feather="calendar"></i>
+                                    </div>
+                                    <div class="megamenu-text">
+                                        <h4>Events</h4>
+                                        <p>Besuchen Sie uns auf Messen und Veranstaltungen</p>
+                                    </div>
+                                </a>
+                                <a href="https://modual.ch/careers/" class="megamenu-item" target="_blank">
+                                    <div class="megamenu-icon">
+                                        <i data-feather="briefcase"></i>
+                                    </div>
+                                    <div class="megamenu-text">
+                                        <h4>Karriere</h4>
+                                        <p>Werden Sie Teil unseres innovativen Teams</p>
+                                    </div>
+                                </a>
+                                <a href="https://modual.ch/corporate-governance/" class="megamenu-item" target="_blank">
+                                    <div class="megamenu-icon">
+                                        <i data-feather="shield"></i>
+                                    </div>
+                                    <div class="megamenu-text">
+                                        <h4>Corporate Governance</h4>
+                                        <p>Transparenz und Verantwortung in der Unternehmensführung</p>
+                                    </div>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </li>
+                <li><a href="index.html#kontakt" class="nav-cta">Kontakt</a></li>
+            </ul>
+            <div class="hamburger">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </div>
+    </nav>
+    
+    <!-- Megamenu Overlay -->
+    <div class="megamenu-overlay"></div>
+
+    <!-- Hero Section -->
+    <section class="installateure-hero">
+        <div class="container">
+            <div class="installateure-hero-content">
+                <span class="section-tag">Fachpartner</span>
+                <h1>Zertifizierte Installateure</h1>
+                <p class="hero-description">Finden Sie qualifizierte modual-Partner in Ihrer Nähe für professionelle Installation und Service</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Installateure Section -->
+    <section class="installateure-section">
+        <div class="container-wide">
+            <div class="installateure-layout">
+                <!-- Filter Sidebar -->
+                <aside class="filter-sidebar">
+                    <div class="filter-header">
+                        <h3>Filter</h3>
+                        <button class="filter-reset" id="resetFilters">Zurücksetzen</button>
+                    </div>
+                    
+                    <div class="filter-group">
+                        <label class="filter-label">
+                            <i data-feather="map-pin"></i>
+                            Postleitzahl
+                        </label>
+                        <input 
+                            type="text" 
+                            id="plzFilter" 
+                            class="filter-input" 
+                            placeholder="z.B. 8001"
+                            maxlength="4"
+                            pattern="[0-9]{4}">
+                        <small class="filter-hint">Umkreis: 30 km</small>
+                    </div>
+
+                    <div class="filter-group">
+                        <label class="filter-label">
+                            <i data-feather="search"></i>
+                            Suche
+                        </label>
+                        <input type="text" id="searchFilter" class="filter-input" placeholder="Name oder Ort...">
+                    </div>
+
+                    <div class="filter-group">
+                        <label class="filter-label">
+                            <i data-feather="award"></i>
+                            Zertifizierung
+                        </label>
+                        <div class="checkbox-group">
+                            <label class="checkbox-label">
+                                <input type="checkbox" id="certifiedOnly" value="certified">
+                                <span>Nur zertifizierte Partner</span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="stats-box">
+                        <div class="stat-item">
+                            <div class="stat-number" id="totalInstallers">27</div>
+                            <div class="stat-label">Partner schweizweit</div>
+                        </div>
+                    </div>
+                </aside>
+
+                <!-- Main Content -->
+                <main class="installateure-main">
+                    <!-- Map -->
+                    <div class="map-container">
+                        <div id="map" class="map"></div>
+                        <button class="map-toggle" id="mapToggle">
+                            <i data-feather="maximize-2"></i>
+                            Karte vergrössern
+                        </button>
+                    </div>
+
+                    <!-- Installateure List -->
+                    <div class="installateure-list" id="installateursList">
+                        <!-- Will be populated by JavaScript -->
+                    </div>
+
+                    <div class="no-results" id="noResults" style="display: none;">
+                        <i data-feather="search"></i>
+                        <h3>Keine Installateure gefunden</h3>
+                        <p>Bitte passen Sie Ihre Filter an oder versuchen Sie eine andere Suche.</p>
+                    </div>
+                </main>
+            </div>
+        </div>
+    </section>
+
+    <!-- Partner Program Section -->
+    <section class="partner-program-section" id="partner-werden">
+        <div class="container">
+            <div class="partner-program-header">
+                <h2>Sie sind Elektroinstallateur?</h2>
+                <p>Werden Sie modual-Partner und profitieren Sie von unserer Plattform</p>
+            </div>
+            
+            <div class="partner-benefits">
+                <div class="benefit-card">
+                    <div class="benefit-icon">
+                        <i data-feather="users"></i>
+                    </div>
+                    <h3>Neue Kunden</h3>
+                    <p>Ihre Adresse wird auf modual.ch angezeigt und erreicht tausende potenzielle Kunden</p>
+                </div>
+                <div class="benefit-card">
+                    <div class="benefit-icon">
+                        <i data-feather="award"></i>
+                    </div>
+                    <h3>Zertifizierung</h3>
+                    <p>Erhalten Sie eine offizielle modual-Zertifizierung nach erfolgreicher Schulung</p>
+                </div>
+                <div class="benefit-card">
+                    <div class="benefit-icon">
+                        <i data-feather="headphones"></i>
+                    </div>
+                    <h3>Direkter Support</h3>
+                    <p>Profitieren Sie von unserem technischen Support und Schulungen</p>
+                </div>
+            </div>
+
+            <div class="partner-form-wrapper">
+                <div class="partner-form-header">
+                    <h3>Jetzt Partner werden</h3>
+                    <p>Füllen Sie das Formular aus und wir melden uns bei Ihnen</p>
+                </div>
+                <form class="partner-form" id="partnerForm">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="firma">Name der Firma *</label>
+                            <input type="text" id="firma" name="firma" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="kontaktperson">Kontaktperson *</label>
+                            <input type="text" id="kontaktperson" name="kontaktperson" required>
+                        </div>
+                    </div>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="telefon">Telefon *</label>
+                            <input type="tel" id="telefon" name="telefon" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="partnerEmail">E-Mail *</label>
+                            <input type="email" id="partnerEmail" name="email" required>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="website">Website</label>
+                        <input type="url" id="website" name="website" placeholder="https://www.ihre-website.ch">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="adresse">Adresse *</label>
+                        <input type="text" id="adresse" name="adresse" placeholder="Strasse und Hausnummer" required>
+                    </div>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="plz">PLZ *</label>
+                            <input type="text" id="plz" name="plz" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="ort">Ort *</label>
+                            <input type="text" id="ort" name="ort" required>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="nachricht">Nachricht (optional)</label>
+                        <textarea id="nachricht" name="nachricht" rows="4" placeholder="Erzählen Sie uns mehr über Ihr Unternehmen..."></textarea>
+                    </div>
+                    
+                    <button type="submit" class="btn btn-primary btn-large">
+                        <i data-feather="send"></i>
+                        Bewerbung absenden
+                    </button>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-col">
+                    <div class="footer-logo">
+                        <img src="assets/images/Modual Logos-YELLOW.png" alt="modual Logo" height="50">
+                    </div>
+                    <p>Swiss Made Batteriespeicher für eine nachhaltige Zukunft</p>
+                </div>
+                <div class="footer-col">
+                    <h4>Produkte</h4>
+                    <ul class="footer-links">
+                        <li><a href="#">AC-Speicher</a></li>
+                        <li><a href="#">DC-Speicher</a></li>
+                        <li><a href="#">Zubehör</a></li>
+                    </ul>
+                </div>
+                <div class="footer-col">
+                    <h4>Unternehmen</h4>
+                    <ul class="footer-links">
+                        <li><a href="#">Über uns</a></li>
+                        <li><a href="#">Nachhaltigkeit</a></li>
+                        <li><a href="#">Karriere</a></li>
+                    </ul>
+                </div>
+                <div class="footer-col">
+                    <h4>Kontakt</h4>
+                    <ul class="footer-links">
+                        <li><a href="tel:+41412440550">+41 41 244 05 50</a></li>
+                    </ul>
+                    <p style="font-size: 0.875rem; color: rgba(255, 255, 255, 0.7); margin-top: 0.5rem;">Mo-Do 09:00 - 17:00<br>Fr 09:00 - 15:00</p>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2025 modual AG. Alle Rechte vorbehalten.</p>
+                <div class="footer-links">
+                    <a href="#">Datenschutz</a>
+                    <a href="#">Impressum</a>
+                    <a href="#">AGB</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script src="installateure.js"></script>
+    <script>
+        feather.replace();
+    </script>
+</body>
+</html>

@@ -728,6 +728,23 @@ function initMegaMenu() {
 // INITIALIZATION
 // ===========================
 
+// ===========================
+// EMERGENCY TOGGLE
+// ===========================
+function initEmergencyToggle() {
+    const toggleBtn = document.getElementById('emergencyToggle');
+    const numberLink = document.getElementById('emergencyNumber');
+    
+    if (toggleBtn && numberLink) {
+        toggleBtn.addEventListener('click', function() {
+            if (numberLink.style.display === 'none') {
+                numberLink.style.display = 'inline-flex';
+                toggleBtn.style.display = 'none';
+            }
+        });
+    }
+}
+
 window.addEventListener('load', () => {
     // Initialize Feather Icons
     if (typeof feather !== 'undefined') {
@@ -745,6 +762,9 @@ window.addEventListener('load', () => {
     
     // Initialize mega menu
     initMegaMenu();
+    
+    // Initialize emergency toggle
+    initEmergencyToggle();
     
     // Fade in body
     document.body.style.opacity = '0';
