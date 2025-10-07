@@ -523,15 +523,228 @@ function updateCostCalculator() {
 }
 
 // ===========================
+// PRODUCT CAROUSEL
+// ===========================
+
+class ProductCarousel {
+    constructor() {
+        this.currentSlide = 0;
+        this.slides = document.querySelectorAll('.carousel-slide');
+        this.indicators = document.querySelectorAll('.indicator');
+        this.prevBtn = document.querySelector('.carousel-prev');
+        this.nextBtn = document.querySelector('.carousel-next');
+        
+        if (!this.slides.length) return;
+        
+        this.init();
+    }
+    
+    init() {
+        // Event listeners for buttons
+        if (this.prevBtn) {
+            this.prevBtn.addEventListener('click', () => this.prevSlide());
+        }
+        if (this.nextBtn) {
+            this.nextBtn.addEventListener('click', () => this.nextSlide());
+        }
+        
+        // Event listeners for indicators
+        this.indicators.forEach((indicator, index) => {
+            indicator.addEventListener('click', () => this.goToSlide(index));
+        });
+        
+        // Auto-advance carousel every 5 seconds
+        this.autoAdvance();
+    }
+    
+    goToSlide(index) {
+        // Remove active class from all slides and indicators
+        this.slides.forEach(slide => slide.classList.remove('active'));
+        this.indicators.forEach(indicator => indicator.classList.remove('active'));
+        
+        // Add active class to current slide and indicator
+        this.currentSlide = index;
+        this.slides[this.currentSlide].classList.add('active');
+        this.indicators[this.currentSlide].classList.add('active');
+    }
+    
+    nextSlide() {
+        const nextIndex = (this.currentSlide + 1) % this.slides.length;
+        this.goToSlide(nextIndex);
+    }
+    
+    prevSlide() {
+        const prevIndex = (this.currentSlide - 1 + this.slides.length) % this.slides.length;
+        this.goToSlide(prevIndex);
+    }
+    
+    autoAdvance() {
+        setInterval(() => {
+            this.nextSlide();
+        }, 5000); // Change slide every 5 seconds
+    }
+}
+
+// ===========================
+// CONTACT FORM
+// ===========================
+
+function initContactForm() {
+    const form = document.getElementById('contactForm');
+    if (!form) return;
+    
+    form.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        
+        // Get form data
+        const formData = {
+            name: document.getElementById('name').value,
+            email: document.getElementById('email').value,
+            phone: document.getElementById('phone').value,
+            message: document.getElementById('message').value,
+            newsletter: document.getElementById('newsletter').checked
+        };
+        
+        // Disable submit button
+        const submitBtn = form.querySelector('button[type="submit"]');
+        const originalText = submitBtn.textContent;
+        submitBtn.disabled = true;
+        submitBtn.textContent = 'Wird gesendet...';
+        
+        try {
+            // TODO: Replace with your actual form endpoint
+            // For now, simulate form submission
+            await new Promise(resolve => setTimeout(resolve, 1000));
+            
+            // Log to console (for development)
+            console.log('Form submitted:', formData);
+            
+            // Show success message
+            const successMessage = document.createElement('div');
+            successMessage.className = 'form-success';
+            successMessage.textContent = '✓ Vielen Dank! Wir haben Ihre Nachricht erhalten und melden uns in Kürze.';
+            
+            // Insert success message before form
+            form.parentNode.insertBefore(successMessage, form);
+            
+            // Hide form
+            form.style.display = 'none';
+            
+            // Remove success message after 5 seconds and show form again
+            setTimeout(() => {
+                successMessage.remove();
+                form.style.display = 'flex';
+                form.reset();
+                submitBtn.disabled = false;
+                submitBtn.textContent = originalText;
+            }, 5000);
+            
+            // TODO: If using a real backend, replace the above with:
+            /*
+            const response = await fetch('YOUR_FORM_ENDPOINT', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(formData)
+            });
+            
+            if (response.ok) {
+                // Show success message
+            } else {
+                throw new Error('Form submission failed');
+            }
+            */
+            
+        } catch (error) {
+            console.error('Form submission error:', error);
+            
+            // Show error message
+            const errorMessage = document.createElement('div');
+            errorMessage.className = 'form-error';
+            errorMessage.textContent = '✗ Es ist ein Fehler aufgetreten. Bitte versuchen Sie es erneut oder kontaktieren Sie uns telefonisch.';
+            
+            form.parentNode.insertBefore(errorMessage, form);
+            
+            setTimeout(() => {
+                errorMessage.remove();
+            }, 5000);
+            
+            submitBtn.disabled = false;
+            submitBtn.textContent = originalText;
+        }
+    });
+}
+
+// ===========================
+// MEGA MENU
+// ===========================
+
+function initMegaMenu() {
+    const megaMenuTrigger = document.querySelector('.has-megamenu');
+    const megaMenu = document.querySelector('.megamenu');
+    const overlay = document.querySelector('.megamenu-overlay');
+    
+    if (!megaMenuTrigger || !megaMenu || !overlay) return;
+    
+    let menuTimeout;
+    
+    // Show mega menu
+    megaMenuTrigger.addEventListener('mouseenter', () => {
+        clearTimeout(menuTimeout);
+        overlay.style.pointerEvents = 'auto';
+    });
+    
+    // Hide mega menu with delay
+    megaMenuTrigger.addEventListener('mouseleave', () => {
+        menuTimeout = setTimeout(() => {
+            overlay.style.pointerEvents = 'none';
+        }, 300);
+    });
+    
+    megaMenu.addEventListener('mouseenter', () => {
+        clearTimeout(menuTimeout);
+    });
+    
+    megaMenu.addEventListener('mouseleave', () => {
+        overlay.style.pointerEvents = 'none';
+    });
+    
+    // Close mega menu when clicking overlay
+    overlay.addEventListener('click', () => {
+        overlay.style.pointerEvents = 'none';
+    });
+    
+    // Prevent default on trigger
+    const trigger = document.querySelector('.megamenu-trigger');
+    if (trigger) {
+        trigger.addEventListener('click', (e) => {
+            e.preventDefault();
+        });
+    }
+}
+
+// ===========================
 // INITIALIZATION
 // ===========================
 
 window.addEventListener('load', () => {
+    // Initialize Feather Icons
+    if (typeof feather !== 'undefined') {
+        feather.replace();
+    }
+    
     // Initialize energy chart
     energyChart = new EnergyChart('energyCanvas');
     
     // Initialize cost calculator
     updateCostCalculator();
+    
+    // Initialize contact form
+    initContactForm();
+    
+    // Initialize mega menu
+    initMegaMenu();
     
     // Fade in body
     document.body.style.opacity = '0';
