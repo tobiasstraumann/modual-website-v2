@@ -119,7 +119,7 @@
                                         <p>Artikel zu Referenzen und News aus der Branche</p>
                                     </div>
                                 </a>
-                                <a href="https://modual.ch/resources/" class="megamenu-item" target="_blank">
+                                <a href="wissensdatenbank.html" class="megamenu-item">
                                     <div class="megamenu-icon">
                                         <i data-feather="book-open"></i>
                                     </div>
@@ -321,55 +321,218 @@
             </div>
             
             <div class="featured-products">
-                <div class="featured-products-grid">
-                    <div class="featured-product-card">
-                        <div class="featured-product-image">
-                            <img src="assets/images/modual_basic_ac_1x2_isolated_v01-Back_side_close.png" alt="modual AC Batteriespeicher">
-                        </div>
-                        <div class="featured-product-content">
-                            <span class="product-status">Verfügbar</span>
-                            <h3 class="product-title">AC-Speicher</h3>
-                            <p class="product-description">Ideal für bestehende Photovoltaik-Anlagen</p>
-                            <div class="product-specs">
-                                <div class="spec-item">
-                                    <span class="spec-label">Kapazität</span>
-                                    <span class="spec-value">23 kWh</span>
+                <div class="product-carousel-container">
+                    <button class="carousel-nav carousel-prev" aria-label="Previous">
+                        <i data-feather="chevron-left"></i>
+                    </button>
+                    
+                    <div class="product-carousel">
+                        <div class="carousel-track">
+                            <!-- DC-Speicher 34 kWh - DEFAULT -->
+                            <div class="featured-product-card" data-default="true" data-type="dc">
+                                <div class="featured-product-image">
+                                    <img src="assets/images/modual_basic_dc_1x3_isolated_v01-Back_side_close.png" alt="34 kWh DC-Speicher">
                                 </div>
-                                <div class="spec-item">
-                                    <span class="spec-label">Typ</span>
-                                    <span class="spec-value">AC-gekoppelt</span>
+                                <div class="featured-product-content">
+                                    <span class="product-status">Verfügbar</span>
+                                    <h3 class="product-title">34 kWh DC-Speicher</h3>
+                                    <p class="product-description">Ideal für neue Photovoltaik-Anlagen</p>
+                                    <div class="product-specs">
+                                        <div class="spec-item">
+                                            <span class="spec-label">Kapazität</span>
+                                            <span class="spec-value">34 kWh</span>
+                                        </div>
+                                        <div class="spec-item">
+                                            <span class="spec-label">Typ</span>
+                                            <span class="spec-value">DC-gekoppelt</span>
+                                        </div>
+                                    </div>
+                                    <a href="produkt.html?id=2" class="btn-featured">
+                                        Mehr erfahren <i data-feather="arrow-right"></i>
+                                    </a>
                                 </div>
                             </div>
-                            <a href="https://modual.ch/de/product/23-kwh-energy-capacity-2/" class="btn-featured" target="_blank">
-                                Mehr erfahren <i data-feather="arrow-right"></i>
-                            </a>
+                            
+                            <!-- AC-Speicher 23 kWh - DEFAULT -->
+                            <div class="featured-product-card" data-default="true" data-type="ac">
+                                <div class="featured-product-image">
+                                    <img src="assets/images/modual_basic_ac_1x2_isolated_v01-Back_side_close.png" alt="23 kWh AC-Speicher">
+                                </div>
+                                <div class="featured-product-content">
+                                    <span class="product-status">Verfügbar</span>
+                                    <h3 class="product-title">23 kWh AC-Speicher</h3>
+                                    <p class="product-description">Ideal für bestehende Photovoltaik-Anlagen</p>
+                                    <div class="product-specs">
+                                        <div class="spec-item">
+                                            <span class="spec-label">Kapazität</span>
+                                            <span class="spec-value">23 kWh</span>
+                                        </div>
+                                        <div class="spec-item">
+                                            <span class="spec-label">Typ</span>
+                                            <span class="spec-value">AC-gekoppelt</span>
+                                        </div>
+                                    </div>
+                                    <a href="produkt.html?id=5" class="btn-featured">
+                                        Mehr erfahren <i data-feather="arrow-right"></i>
+                                    </a>
+                                </div>
+                            </div>
+                            
+                            <!-- Hidden products pool -->
+                            <!-- DC Products - using available image -->
+                            <div class="featured-product-card" data-type="dc" style="display: none;">
+                                <div class="featured-product-image">
+                                    <img src="assets/images/modual_basic_dc_1x3_isolated_v01-Back_side_close.png" alt="11.5 kWh DC-Speicher">
+                                </div>
+                                <div class="featured-product-content">
+                                    <span class="product-status">Verfügbar</span>
+                                    <h3 class="product-title">11.5 kWh DC-Speicher</h3>
+                                    <p class="product-description">Kompakt und effizient für neue PV-Anlagen</p>
+                                    <div class="product-specs">
+                                        <div class="spec-item">
+                                            <span class="spec-label">Kapazität</span>
+                                            <span class="spec-value">11.5 kWh</span>
+                                        </div>
+                                        <div class="spec-item">
+                                            <span class="spec-label">Typ</span>
+                                            <span class="spec-value">DC-gekoppelt</span>
+                                        </div>
+                                    </div>
+                                    <a href="produkt.html?id=0" class="btn-featured">
+                                        Mehr erfahren <i data-feather="arrow-right"></i>
+                                    </a>
+                                </div>
+                            </div>
+                            
+                            <div class="featured-product-card" data-type="dc" style="display: none;">
+                                <div class="featured-product-image">
+                                    <img src="assets/images/modual_basic_dc_1x3_isolated_v01-Back_side_close.png" alt="23 kWh DC-Speicher">
+                                </div>
+                                <div class="featured-product-content">
+                                    <span class="product-status">Verfügbar</span>
+                                    <h3 class="product-title">23 kWh DC-Speicher</h3>
+                                    <p class="product-description">Optimale Größe für neue PV-Anlagen</p>
+                                    <div class="product-specs">
+                                        <div class="spec-item">
+                                            <span class="spec-label">Kapazität</span>
+                                            <span class="spec-value">23 kWh</span>
+                                        </div>
+                                        <div class="spec-item">
+                                            <span class="spec-label">Typ</span>
+                                            <span class="spec-value">DC-gekoppelt</span>
+                                        </div>
+                                    </div>
+                                    <a href="produkt.html?id=1" class="btn-featured">
+                                        Mehr erfahren <i data-feather="arrow-right"></i>
+                                    </a>
+                                </div>
+                            </div>
+                            
+                            <div class="featured-product-card" data-type="dc" style="display: none;">
+                                <div class="featured-product-image">
+                                    <img src="assets/images/modual_basic_dc_1x3_isolated_v01-Back_side_close.png" alt="46 kWh DC-Speicher">
+                                </div>
+                                <div class="featured-product-content">
+                                    <span class="product-status">Verfügbar</span>
+                                    <h3 class="product-title">46 kWh DC-Speicher</h3>
+                                    <p class="product-description">Hohe Kapazität für anspruchsvolle Anwendungen</p>
+                                    <div class="product-specs">
+                                        <div class="spec-item">
+                                            <span class="spec-label">Kapazität</span>
+                                            <span class="spec-value">46 kWh</span>
+                                        </div>
+                                        <div class="spec-item">
+                                            <span class="spec-label">Typ</span>
+                                            <span class="spec-value">DC-gekoppelt</span>
+                                        </div>
+                                    </div>
+                                    <a href="produkt.html?id=3" class="btn-featured">
+                                        Mehr erfahren <i data-feather="arrow-right"></i>
+                                    </a>
+                                </div>
+                            </div>
+                            
+                            <!-- AC Products - using available image -->
+                            <div class="featured-product-card" data-type="ac" style="display: none;">
+                                <div class="featured-product-image">
+                                    <img src="assets/images/modual_basic_ac_1x2_isolated_v01-Back_side_close.png" alt="11.5 kWh AC-Speicher">
+                                </div>
+                                <div class="featured-product-content">
+                                    <span class="product-status">Verfügbar</span>
+                                    <h3 class="product-title">11.5 kWh AC-Speicher</h3>
+                                    <p class="product-description">Kompakte Lösung mit integriertem Wechselrichter</p>
+                                    <div class="product-specs">
+                                        <div class="spec-item">
+                                            <span class="spec-label">Kapazität</span>
+                                            <span class="spec-value">11.5 kWh</span>
+                                        </div>
+                                        <div class="spec-item">
+                                            <span class="spec-label">Typ</span>
+                                            <span class="spec-value">AC-gekoppelt</span>
+                                        </div>
+                                    </div>
+                                    <a href="produkt.html?id=4" class="btn-featured">
+                                        Mehr erfahren <i data-feather="arrow-right"></i>
+                                    </a>
+                                </div>
+                            </div>
+                            
+                            <div class="featured-product-card" data-type="ac" style="display: none;">
+                                <div class="featured-product-image">
+                                    <img src="assets/images/modual_basic_ac_1x2_isolated_v01-Back_side_close.png" alt="34 kWh AC-Speicher">
+                                </div>
+                                <div class="featured-product-content">
+                                    <span class="product-status">Verfügbar</span>
+                                    <h3 class="product-title">34 kWh AC-Speicher</h3>
+                                    <p class="product-description">Erweiterte Kapazität für höheren Bedarf</p>
+                                    <div class="product-specs">
+                                        <div class="spec-item">
+                                            <span class="spec-label">Kapazität</span>
+                                            <span class="spec-value">34 kWh</span>
+                                        </div>
+                                        <div class="spec-item">
+                                            <span class="spec-label">Typ</span>
+                                            <span class="spec-value">AC-gekoppelt</span>
+                                        </div>
+                                    </div>
+                                    <a href="produkt.html?id=6" class="btn-featured">
+                                        Mehr erfahren <i data-feather="arrow-right"></i>
+                                    </a>
+                                </div>
+                            </div>
+                            
+                            <div class="featured-product-card" data-type="ac" style="display: none;">
+                                <div class="featured-product-image">
+                                    <img src="assets/images/modual_basic_ac_1x2_isolated_v01-Back_side_close.png" alt="46 kWh AC-Speicher">
+                                </div>
+                                <div class="featured-product-content">
+                                    <span class="product-status">Verfügbar</span>
+                                    <h3 class="product-title">46 kWh AC-Speicher</h3>
+                                    <p class="product-description">Maximale Kapazität für große Haushalte</p>
+                                    <div class="product-specs">
+                                        <div class="spec-item">
+                                            <span class="spec-label">Kapazität</span>
+                                            <span class="spec-value">46 kWh</span>
+                                        </div>
+                                        <div class="spec-item">
+                                            <span class="spec-label">Typ</span>
+                                            <span class="spec-value">AC-gekoppelt</span>
+                                        </div>
+                                    </div>
+                                    <a href="produkt.html?id=7" class="btn-featured">
+                                        Mehr erfahren <i data-feather="arrow-right"></i>
+                                    </a>
+                                </div>
+                            </div>
                         </div>
                     </div>
                     
-                    <div class="featured-product-card">
-                        <div class="featured-product-image">
-                            <img src="assets/images/modual_basic_dc_1x3_isolated_v01-Back_side_close.png" alt="modual DC Batteriespeicher">
-                        </div>
-                        <div class="featured-product-content">
-                            <span class="product-status">Verfügbar</span>
-                            <h3 class="product-title">DC-Speicher</h3>
-                            <p class="product-description">Ideal für neue Photovoltaik-Anlagen</p>
-                            <div class="product-specs">
-                                <div class="spec-item">
-                                    <span class="spec-label">Kapazität</span>
-                                    <span class="spec-value">34 kWh</span>
-                                </div>
-                                <div class="spec-item">
-                                    <span class="spec-label">Typ</span>
-                                    <span class="spec-value">DC-gekoppelt</span>
-                                </div>
-                            </div>
-                            <a href="https://modual.ch/de/product/34-kwh-energy-capacity/" class="btn-featured" target="_blank">
-                                Mehr erfahren <i data-feather="arrow-right"></i>
-                            </a>
-                        </div>
-                    </div>
+                    <button class="carousel-nav carousel-next" aria-label="Next">
+                        <i data-feather="chevron-right"></i>
+                    </button>
                 </div>
+                
+                <div class="carousel-dots"></div>
                 
                 <div class="product-benefits">
                     <div class="benefit-card">

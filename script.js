@@ -523,67 +523,9 @@ function updateCostCalculator() {
 }
 
 // ===========================
-// PRODUCT CAROUSEL
+// PRODUCT CAROUSEL (OLD - REMOVED)
 // ===========================
-
-class ProductCarousel {
-    constructor() {
-        this.currentSlide = 0;
-        this.slides = document.querySelectorAll('.carousel-slide');
-        this.indicators = document.querySelectorAll('.indicator');
-        this.prevBtn = document.querySelector('.carousel-prev');
-        this.nextBtn = document.querySelector('.carousel-next');
-        
-        if (!this.slides.length) return;
-        
-        this.init();
-    }
-    
-    init() {
-        // Event listeners for buttons
-        if (this.prevBtn) {
-            this.prevBtn.addEventListener('click', () => this.prevSlide());
-        }
-        if (this.nextBtn) {
-            this.nextBtn.addEventListener('click', () => this.nextSlide());
-        }
-        
-        // Event listeners for indicators
-        this.indicators.forEach((indicator, index) => {
-            indicator.addEventListener('click', () => this.goToSlide(index));
-        });
-        
-        // Auto-advance carousel every 5 seconds
-        this.autoAdvance();
-    }
-    
-    goToSlide(index) {
-        // Remove active class from all slides and indicators
-        this.slides.forEach(slide => slide.classList.remove('active'));
-        this.indicators.forEach(indicator => indicator.classList.remove('active'));
-        
-        // Add active class to current slide and indicator
-        this.currentSlide = index;
-        this.slides[this.currentSlide].classList.add('active');
-        this.indicators[this.currentSlide].classList.add('active');
-    }
-    
-    nextSlide() {
-        const nextIndex = (this.currentSlide + 1) % this.slides.length;
-        this.goToSlide(nextIndex);
-    }
-    
-    prevSlide() {
-        const prevIndex = (this.currentSlide - 1 + this.slides.length) % this.slides.length;
-        this.goToSlide(prevIndex);
-    }
-    
-    autoAdvance() {
-        setInterval(() => {
-            this.nextSlide();
-        }, 5000); // Change slide every 5 seconds
-    }
-}
+// Removed duplicate class definition - see line 731 for active implementation
 
 // ===========================
 // CONTACT FORM
@@ -725,6 +667,139 @@ function initMegaMenu() {
 }
 
 // ===========================
+// PRODUCT CAROUSEL
+// ===========================
+
+class ProductCarousel {
+    constructor() {
+        this.track = document.querySelector('.carousel-track');
+        this.prevBtn = document.querySelector('.carousel-prev');
+        this.nextBtn = document.querySelector('.carousel-next');
+        this.dotsContainer = document.querySelector('.carousel-dots');
+        
+        if (!this.track) return;
+        
+        // Get all cards and separate by type
+        const allCards = Array.from(this.track.children);
+        this.dcProducts = allCards.filter(card => card.dataset.type === 'dc');
+        this.acProducts = allCards.filter(card => card.dataset.type === 'ac');
+        
+        // Initialize with default visible products
+        this.visibleCards = allCards.filter(card => card.dataset.default === 'true');
+        this.currentIndex = 0;
+        this.cardsToShow = this.getCardsToShow();
+        
+        this.init();
+    }
+    
+    getCardsToShow() {
+        const width = window.innerWidth;
+        if (width >= 1200) return 2;
+        if (width >= 768) return 1;
+        return 1;
+    }
+    
+    init() {
+        // Show only default cards initially
+        this.showVisibleCards();
+        this.updateCarousel();
+        this.setupEventListeners();
+        
+        // Update on resize
+        window.addEventListener('resize', () => {
+            const newCardsToShow = this.getCardsToShow();
+            if (newCardsToShow !== this.cardsToShow) {
+                this.cardsToShow = newCardsToShow;
+                this.updateCarousel();
+            }
+        });
+    }
+    
+    showVisibleCards() {
+        // Hide all cards first
+        const allCards = Array.from(this.track.children);
+        allCards.forEach(card => card.style.display = 'none');
+        
+        // Show only visible cards
+        this.visibleCards.forEach(card => card.style.display = 'block');
+    }
+    
+    swapRandomProduct() {
+        // Determine which product to swap based on current view
+        const isSwappingDC = Math.random() < 0.5;
+        const productType = isSwappingDC ? 'dc' : 'ac';
+        const productPool = isSwappingDC ? this.dcProducts : this.acProducts;
+        
+        // Find current visible product of this type
+        const currentProductIndex = this.visibleCards.findIndex(card => 
+            card.dataset.type === productType && card.style.display !== 'none'
+        );
+        
+        if (currentProductIndex === -1) return;
+        
+        // Get a random different product
+        const availableProducts = productPool.filter(p => !this.visibleCards.includes(p));
+        if (availableProducts.length === 0) return;
+        
+        const randomProduct = availableProducts[Math.floor(Math.random() * availableProducts.length)];
+        const currentProduct = this.visibleCards[currentProductIndex];
+        
+        // Swap the products
+        this.visibleCards[currentProductIndex] = randomProduct;
+        
+        // Update display
+        this.showVisibleCards();
+        this.updateCarousel();
+        
+        // Reinitialize feather icons for the new card
+        if (typeof feather !== 'undefined') {
+            feather.replace();
+        }
+    }
+    
+    setupEventListeners() {
+        if (this.prevBtn) {
+            this.prevBtn.addEventListener('click', () => this.swapRandomProduct());
+        }
+        
+        if (this.nextBtn) {
+            this.nextBtn.addEventListener('click', () => this.swapRandomProduct());
+        }
+        
+        // Touch/swipe support
+        let startX = 0;
+        let currentX = 0;
+        
+        this.track.addEventListener('touchstart', (e) => {
+            startX = e.touches[0].clientX;
+        });
+        
+        this.track.addEventListener('touchmove', (e) => {
+            currentX = e.touches[0].clientX;
+        });
+        
+        this.track.addEventListener('touchend', () => {
+            const diff = startX - currentX;
+            if (Math.abs(diff) > 50) {
+                this.swapRandomProduct();
+            }
+        });
+    }
+    
+    updateCarousel() {
+        // No sliding - cards are swapped in place
+        // Just ensure buttons are always enabled for random swapping
+        if (this.prevBtn) {
+            this.prevBtn.disabled = false;
+        }
+        
+        if (this.nextBtn) {
+            this.nextBtn.disabled = false;
+        }
+    }
+}
+
+// ===========================
 // INITIALIZATION
 // ===========================
 
@@ -765,6 +840,9 @@ window.addEventListener('load', () => {
     
     // Initialize emergency toggle
     initEmergencyToggle();
+    
+    // Initialize product carousel
+    new ProductCarousel();
     
     // Fade in body
     document.body.style.opacity = '0';

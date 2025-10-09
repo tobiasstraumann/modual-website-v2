@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wissensdatenbank - modual Batteriespeicher</title>
+    <meta name="description" content="Umfassende Dokumentation und Anleitungen für modual Batteriespeichersysteme">
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="wissensdatenbank.css">
+    <link rel="icon" type="image/x-icon" href="assets/favicon.ico">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="logo">
+                <img src="https://modual.ch/wp-content/uploads/2024/03/cropped-Modual-Logos-FULL_X-SPACE.webp" alt="modual Logo" height="40">
+            </div>
+            <ul class="nav-menu">
+                <li class="has-megamenu">
+                    <a href="index.html#produkte" class="megamenu-trigger">Produkte</a>
+                </li>
+                <li><a href="index.html#2ndlife">Second-Life</a></li>
+                <li class="has-megamenu">
+                    <a href="wissensdatenbank.html" class="megamenu-trigger">Hilfe & Ressourcen</a>
+                </li>
+                <li class="has-megamenu">
+                    <a href="index.html#about" class="megamenu-trigger">Über uns</a>
+                </li>
+                <li><a href="index.html#kontakt" class="nav-cta">Kontakt</a></li>
+            </ul>
+            <div class="hamburger">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </div>
+    </nav>
+    
+    <!-- Megamenu Overlay -->
+    <div class="megamenu-overlay"></div>
+
+    <!-- Documentation Layout -->
+    <div class="docs-container">
+        <!-- Sidebar Navigation -->
+        <aside class="docs-sidebar" id="docsSidebar">
+            <div class="docs-search-container">
+                <input type="text" id="docsSearch" placeholder="Suchen..." class="docs-search-input">
+                <i data-feather="search"></i>
+            </div>
+            
+            <nav class="docs-nav" id="docsNav">
+                <!-- Navigation will be loaded here -->
+                <div class="docs-loading">
+                    <div class="skeleton skeleton-nav"></div>
+                    <div class="skeleton skeleton-nav"></div>
+                    <div class="skeleton skeleton-nav"></div>
+                </div>
+            </nav>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="docs-content" id="docsContent">
+            <div class="docs-content-inner">
+                <!-- Toolbar -->
+                <div class="docs-toolbar">
+                    <div class="docs-breadcrumb" id="docsBreadcrumb">
+                        <a href="wissensdatenbank.html">Wissensdatenbank</a>
+                    </div>
+                    <div class="docs-actions">
+                        <button class="docs-action-btn" id="copyForLLM" title="Für LLM kopieren">
+                            <i data-feather="copy"></i>
+                            <span>Kopieren</span>
+                        </button>
+                        <button class="docs-action-btn" id="downloadPDF" title="Als PDF herunterladen">
+                            <i data-feather="download"></i>
+                            <span>PDF</span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Article Content -->
+                <article class="docs-article" id="docsArticle">
+                    <div class="docs-loading">
+                        <div class="skeleton skeleton-title"></div>
+                        <div class="skeleton skeleton-text"></div>
+                        <div class="skeleton skeleton-text" style="width: 90%;"></div>
+                        <div class="skeleton skeleton-text" style="width: 80%;"></div>
+                    </div>
+                </article>
+
+                <!-- Navigation Footer -->
+                <div class="docs-navigation-footer" id="docsNavFooter" style="display: none;">
+                    <a href="#" class="docs-nav-prev" id="docsPrevLink">
+                        <i data-feather="arrow-left"></i>
+                        <span></span>
+                    </a>
+                    <a href="#" class="docs-nav-next" id="docsNextLink">
+                        <span></span>
+                        <i data-feather="arrow-right"></i>
+                    </a>
+                </div>
+            </div>
+        </main>
+
+        <!-- Table of Contents -->
+        <aside class="docs-toc" id="docsTOC">
+            <h3>Auf dieser Seite</h3>
+            <nav id="tocNav">
+                <!-- TOC will be generated here -->
+            </nav>
+        </aside>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-col">
+                    <div class="footer-logo">
+                        <img src="assets/images/Modual Logos-YELLOW.png" alt="modual Logo" height="50">
+                    </div>
+                    <p>Swiss Made Batteriespeicher für eine nachhaltige Zukunft</p>
+                    <div style="margin-top: 1rem; font-size: 0.9rem; line-height: 1.6;">
+                        <strong>modual AG</strong><br>
+                        Seewenstrasse 13<br>
+                        CH-6440 Brunnen<br>
+                        Switzerland<br>
+                        <a href="tel:+41412440550" style="color: rgba(255, 255, 255, 0.7);">+41 41 244 05 50</a><br>
+                        <small>Mo-Do 09:00 - 17:00, Fr 09:00 - 15:00</small>
+                    </div>
+                    <div class="social-media-links">
+                        <a href="https://www.linkedin.com/company/modual-ag/" target="_blank" rel="noopener" aria-label="LinkedIn">
+                            <i data-feather="linkedin"></i>
+                        </a>
+                        <a href="https://www.instagram.com/modual.ch/" target="_blank" rel="noopener" aria-label="Instagram">
+                            <i data-feather="instagram"></i>
+                        </a>
+                        <a href="https://www.youtube.com/@modual" target="_blank" rel="noopener" aria-label="YouTube">
+                            <i data-feather="youtube"></i>
+                        </a>
+                    </div>
+                </div>
+                <div class="footer-col">
+                    <h4>Produkte</h4>
+                    <ul>
+                        <li><a href="#">Second Life</a></li>
+                        <li><a href="#">Zubehör</a></li>
+                        <li><a href="#">Monitoring</a></li>
+                    </ul>
+                </div>
+                <div class="footer-col">
+                    <h4>Unternehmen</h4>
+                    <ul>
+                        <li><a href="#">Über uns</a></li>
+                        <li><a href="#">Nachhaltigkeit</a></li>
+                        <li><a href="#">Karriere</a></li>
+                        <li><a href="#">Presse</a></li>
+                    </ul>
+                </div>
+                <div class="footer-col">
+                    <h4>Support</h4>
+                    <ul>
+                        <li><a href="#">FAQ</a></li>
+                        <li><a href="#">Dokumentation</a></li>
+                        <li><a href="#">Kontakt</a></li>
+                        <li><a href="#">Partner</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2025 modual. Alle Rechte vorbehalten.</p>
+                <div class="footer-links">
+                    <a href="#">Datenschutz</a>
+                    <a href="#">Impressum</a>
+                    <a href="#">AGB</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Copy Success Toast -->
+    <div class="copy-toast" id="copyToast">
+        <i data-feather="check-circle"></i>
+        <span>Inhalt kopiert!</span>
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://unpkg.com/feather-icons"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/6.6.2/fuse.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    <script src="script.js?v=2"></script>
+    <script src="wissensdatenbank.js?v=2"></script>
+    <script>
+        // Clear old cache on load
+        if (localStorage.getItem('modual_docs_cache')) {
+            console.log('Clearing old cache...');
+            localStorage.removeItem('modual_docs_cache');
+        }
+    </script>
+</body>
+</html>
