@@ -1,11 +1,64 @@
 // Product Page JavaScript
 const API_URL = 'https://script.google.com/macros/s/AKfycbwrl8QQDJToFy6IWz8qVmJ8aQm3q33D4u2tv7ptuJV1TeQ-Sh9ck1gF32bU30KtdYU/exec';
+const CACHE_KEY = 'modual_products_cache';
+const CACHE_DURATION = 60 * 60 * 1000; // 1 Stunde in Millisekunden
 
 let productsData = [];
 
-// Load product data from API
+// Check if cached data is still valid
+function getCachedData() {
+    try {
+        const cached = localStorage.getItem(CACHE_KEY);
+        if (!cached) return null;
+        
+        const { data, timestamp } = JSON.parse(cached);
+        const age = Date.now() - timestamp;
+        
+        if (age < CACHE_DURATION) {
+            console.log(`Using cached data (${Math.round(age / 1000)}s old)`);
+            return data;
+        }
+        
+        console.log('Cache expired, fetching fresh data...');
+        return null;
+    } catch (error) {
+        console.error('Error reading cache:', error);
+        return null;
+    }
+}
+
+// Save data to cache
+function setCachedData(data) {
+    try {
+        const cacheObject = {
+            data: data,
+            timestamp: Date.now()
+        };
+        localStorage.setItem(CACHE_KEY, JSON.stringify(cacheObject));
+        console.log('Data cached successfully');
+    } catch (error) {
+        console.error('Error saving to cache:', error);
+    }
+}
+
+// Load product data from API with caching
 async function loadProductData() {
     try {
+        // Check if force refresh is requested
+        if (shouldForceRefresh()) {
+            console.log('Force refresh requested, clearing cache...');
+            clearCache();
+        }
+        
+        // Try to get cached data first
+        const cachedData = getCachedData();
+        if (cachedData && Array.isArray(cachedData) && cachedData.length > 0) {
+            productsData = cachedData;
+            console.log('Products loaded from cache:', productsData.length, 'products');
+            return cachedData;
+        }
+        
+        // Fetch from API if no valid cache
         console.log('Fetching products from API...');
         const response = await fetch(API_URL);
         
@@ -22,14 +75,43 @@ async function loadProductData() {
             return [];
         }
         
+        // Save to cache
+        setCachedData(data);
+        
         productsData = data;
-        console.log('Products loaded successfully:', productsData.length, 'products');
+        console.log('Products loaded from API:', productsData.length, 'products');
         console.log('First product:', productsData[0]);
         
         return data;
     } catch (error) {
         console.error('Error loading product data:', error);
+        
+        // Try to use expired cache as fallback
+        const fallbackCache = localStorage.getItem(CACHE_KEY);
+        if (fallbackCache) {
+            try {
+                const { data } = JSON.parse(fallbackCache);
+                console.warn('Using expired cache as fallback');
+                productsData = data;
+                return data;
+            } catch (e) {
+                console.error('Fallback cache also failed');
+            }
+        }
+        
         return [];
+    }
+}
+
+// Clear cache (für Debugging oder manuelles Update)
+function clearCache() {
+    try {
+        localStorage.removeItem(CACHE_KEY);
+        console.log('Cache cleared successfully');
+        return true;
+    } catch (error) {
+        console.error('Error clearing cache:', error);
+        return false;
     }
 }
 
@@ -37,6 +119,55 @@ async function loadProductData() {
 function getUrlParameter(name) {
     const urlParams = new URLSearchParams(window.location.search);
     return urlParams.get(name);
+}
+
+// Check if force refresh is requested
+function shouldForceRefresh() {
+    return window.location.search.includes('refresh=true');
+}
+
+// Show loading skeleton
+function showLoadingSkeleton() {
+    const heroSection = document.querySelector('.product-hero-new');
+    if (heroSection) {
+        heroSection.classList.add('loading');
+    }
+    
+    // Add skeleton elements
+    const productInfo = document.querySelector('.product-info-main');
+    if (productInfo && !productInfo.querySelector('.skeleton')) {
+        const skeletonHTML = `
+            <div class="skeleton skeleton-title"></div>
+            <div class="skeleton skeleton-tagline"></div>
+            <div class="skeleton skeleton-text" style="width: 80%;"></div>
+            <div class="skeleton skeleton-text" style="width: 60%;"></div>
+        `;
+        productInfo.insertAdjacentHTML('afterbegin', skeletonHTML);
+    }
+    
+    // Add skeleton to image
+    const imageContainer = document.querySelector('.product-image-main');
+    if (imageContainer && !imageContainer.querySelector('.skeleton-image')) {
+        const skeletonImage = document.createElement('div');
+        skeletonImage.className = 'skeleton skeleton-image';
+        skeletonImage.style.position = 'absolute';
+        skeletonImage.style.top = '0';
+        skeletonImage.style.left = '0';
+        skeletonImage.style.zIndex = '1';
+        imageContainer.style.position = 'relative';
+        imageContainer.insertBefore(skeletonImage, imageContainer.firstChild);
+    }
+}
+
+// Hide loading skeleton
+function hideLoadingSkeleton() {
+    const heroSection = document.querySelector('.product-hero-new');
+    if (heroSection) {
+        heroSection.classList.remove('loading');
+    }
+    
+    // Remove skeleton elements
+    document.querySelectorAll('.skeleton').forEach(el => el.remove());
 }
 
 // Get product by name or index
@@ -47,9 +178,10 @@ function getProduct(identifier) {
         return null;
     }
     
-    // Default to first product if no identifier
+    // If no identifier provided, return null to show error instead of default
     if (!identifier) {
-        return productsData[1] || productsData[0];
+        console.warn('No product ID specified in URL');
+        return null;
     }
     
     // Try to find by product_name
@@ -63,7 +195,7 @@ function getProduct(identifier) {
     }
     
     console.warn(`Product not found for identifier: ${identifier}`);
-    return productsData[1] || productsData[0]; // Default
+    return null;
 }
 
 // Update page with product data
@@ -95,10 +227,13 @@ function updateProductPage(product) {
     if (productImage) {
         if (product.product_type === 'DC') {
             productImage.src = 'assets/images/modual_basic_dc_1x3_isolated_v01-Back_side_close.png';
+        } else if (product.product_type === 'AC') {
+            productImage.src = 'assets/images/modual_basic_ac_1x2_isolated_v01-Back_side_close.png';
         } else {
-            productImage.src = 'assets/images/IMG_3814.jpg'; // AC image placeholder
+            productImage.src = 'assets/images/modual_basic_dc_1x3_isolated_v01-Back_side_close.png'; // Fallback
         }
         productImage.alt = `modual ${product.product_name}`;
+        productImage.style.opacity = '1'; // Make image visible
     }
     
     // Update main heading
@@ -111,11 +246,11 @@ function updateProductPage(product) {
         if (product.capacity_kwh <= 11.5) {
             tagline.textContent = 'Kompakt und effizient';
         } else if (product.capacity_kwh <= 23) {
-            tagline.textContent = 'Optimale Größe für neue PV-Anlagen';
+            tagline.textContent = 'Optimale Grösse für neue PV-Anlagen';
         } else if (product.capacity_kwh <= 34.5) {
             tagline.textContent = 'Erweiterte Kapazität für höheren Bedarf';
         } else {
-            tagline.textContent = 'Maximale Kapazität für große Haushalte';
+            tagline.textContent = 'Maximale Kapazität für grosse Haushalte';
         }
     }
     
@@ -155,6 +290,12 @@ function updateProductPage(product) {
     
     // Update comparison table
     updateComparisonTable(product);
+    
+    // Update use cases
+    updateUseCases(product);
+    
+    // Update compatible products
+    updateCompatibleProducts(product);
 }
 
 // Update technical specifications
@@ -257,6 +398,186 @@ function updateComparisonTable(currentProduct) {
     }
 }
 
+// Update use cases based on product type
+function updateUseCases(product) {
+    const useCasesLayout = document.querySelector('.usecases-layout');
+    if (!useCasesLayout) return;
+    
+    // DC = neue PV-Anlagen, AC = bestehende PV-Anlagen (Retrofit)
+    const isDC = product.product_type === 'DC';
+    const isSmallCapacity = product.capacity_kwh <= 23;
+    
+    let html = '';
+    
+    if (isSmallCapacity) {
+        // 11-23 kWh: Einfamilienhaus
+        if (isDC) {
+            // DC-Systeme: Ideal für NEUE PV-Anlagen
+            html = `
+                <div class="usecase-item">
+                    <img src="assets/images/einfamilienhaus-ohne-solaranlage.png" alt="Einfamilienhaus neue PV-Anlage">
+                    <h3>Neue PV-Anlage</h3>
+                    <p>DC-Speicher ideal für Neuinstallationen im Einfamilienhaus.</p>
+                    <ul>
+                        <li>✓ Bis zu ${product.capacity_kwh <= 11.5 ? '50-60' : '70'}% Autarkie</li>
+                        <li>✓ Optimale Systemintegration</li>
+                        <li>✓ Maximaler Eigenverbrauch</li>
+                    </ul>
+                </div>
+                <div class="usecase-item">
+                    <img src="assets/images/einfamilienhaus-mit-solaranlage.png" alt="Einfamilienhaus Erweiterung">
+                    <h3>Anlagenerweiterung</h3>
+                    <p>Perfekt für die Erweiterung bestehender Systeme.</p>
+                    <ul>
+                        <li>✓ Flexible Integration</li>
+                        <li>✓ Erhöht Eigenverbrauch</li>
+                        <li>✓ Zukunftssicher</li>
+                    </ul>
+                </div>
+            `;
+        } else {
+            // AC-Systeme: Ideal für BESTEHENDE PV-Anlagen (Retrofit)
+            html = `
+                <div class="usecase-item">
+                    <img src="assets/images/einfamilienhaus-mit-solaranlage.png" alt="Einfamilienhaus bestehende PV-Anlage">
+                    <h3>Bestehende PV-Anlage</h3>
+                    <p>AC-Speicher perfekt für Retrofit bei bestehenden Photovoltaik-Anlagen.</p>
+                    <ul>
+                        <li>✓ Retrofit-fähig</li>
+                        <li>✓ Plug & Play Lösung</li>
+                        <li>✓ Unabhängig vom bestehenden Wechselrichter</li>
+                    </ul>
+                </div>
+                <div class="usecase-item">
+                    <img src="assets/images/einfamilienhaus-ohne-solaranlage.png" alt="Einfamilienhaus ohne PV">
+                    <h3>Ohne PV-Anlage</h3>
+                    <p>Auch ohne Solaranlage nutzbar für Lastspitzenoptimierung.</p>
+                    <ul>
+                        <li>✓ Netzunabhängigkeit</li>
+                        <li>✓ Stromkosten senken</li>
+                        <li>✓ Notstromfähig</li>
+                    </ul>
+                </div>
+            `;
+        }
+    } else {
+        // 34-46 kWh: Gewerbe
+        if (isDC) {
+            // DC-Systeme: Ideal für NEUE PV-Anlagen
+            html = `
+                <div class="usecase-item">
+                    <img src="assets/images/gewerbe-ohne-solaranlage.png" alt="Gewerbe neue Installation">
+                    <h3>Gewerbe - Neuinstallation</h3>
+                    <p>DC-Speicher für gewerbliche Neubauten und Grossprojekte.</p>
+                    <ul>
+                        <li>✓ Bis zu ${product.capacity_kwh >= 46 ? '85' : '80'}% Autarkie</li>
+                        <li>✓ Optimale Systemintegration</li>
+                        <li>✓ Skalierbare Lösung</li>
+                    </ul>
+                </div>
+                <div class="usecase-item">
+                    <img src="assets/images/gewerbe-mit-solaranlage.png" alt="Gewerbe Erweiterung">
+                    <h3>Gewerbe - Anlagenerweiterung</h3>
+                    <p>Erweiterung bestehender gewerblicher Systeme.</p>
+                    <ul>
+                        <li>✓ Hohe Kapazität</li>
+                        <li>✓ Lastspitzenoptimierung</li>
+                        <li>✓ Reduktion der Netzkosten</li>
+                    </ul>
+                </div>
+            `;
+        } else {
+            // AC-Systeme: Ideal für BESTEHENDE PV-Anlagen (Retrofit)
+            html = `
+                <div class="usecase-item">
+                    <img src="assets/images/gewerbe-mit-solaranlage.png" alt="Gewerbe bestehende PV-Anlage">
+                    <h3>Gewerbe - Bestehende PV</h3>
+                    <p>AC-Speicher für Retrofit bei gewerblichen Anwendungen.</p>
+                    <ul>
+                        <li>✓ Retrofit-fähig</li>
+                        <li>✓ Plug & Play Installation</li>
+                        <li>✓ Lastspitzenoptimierung</li>
+                    </ul>
+                </div>
+                <div class="usecase-item">
+                    <img src="assets/images/gewerbe-ohne-solaranlage.png" alt="Gewerbe ohne PV">
+                    <h3>Gewerbe - Ohne PV</h3>
+                    <p>Energiemanagement auch ohne Solaranlage.</p>
+                    <ul>
+                        <li>✓ Netzoptimierung</li>
+                        <li>✓ Reduktion der Netzkosten</li>
+                        <li>✓ Notstromfähig</li>
+                    </ul>
+                </div>
+            `;
+        }
+    }
+    
+    useCasesLayout.innerHTML = html;
+}
+
+// Update compatible products based on product type
+function updateCompatibleProducts(product) {
+    const interopGrid = document.querySelector('.interop-grid');
+    if (!interopGrid) return;
+    
+    const isDC = product.product_type === 'DC';
+    
+    // Common products for all types
+    let html = `
+        <div class="interop-item">
+            <div class="interop-image">
+                <img src="assets/images/solarmanager-app.png" alt="Solarmanager App">
+            </div>
+            <h3>Solarmanager App</h3>
+            <p>Intelligentes Energiemanagement und Monitoring</p>
+        </div>
+        <div class="interop-item">
+            <div class="interop-image">
+                <img src="assets/images/smart-me-zähler.jpg" alt="Smart-me Zähler">
+            </div>
+            <h3>Smart-me Zähler</h3>
+            <p>Präzise Energiemessung in Echtzeit</p>
+        </div>
+        <div class="interop-item">
+            <div class="interop-image">
+                <img src="assets/images/pico-ladestation.jpg" alt="Pico EV-Ladestation">
+            </div>
+            <h3>Pico EV-Ladestation</h3>
+            <p>Intelligentes Laden mit Solarenergie</p>
+        </div>
+    `;
+    
+    // Add inverters only for DC products
+    if (isDC) {
+        html += `
+            <div class="interop-item">
+                <div class="interop-image">
+                    <img src="assets/images/solis-wechselrichter-S6-EH3P(8-15)K02-NV-YD-L.png" alt="Solis Wechselrichter">
+                </div>
+                <h3>Solis Wechselrichter</h3>
+                <p>Hybridwechselrichter für optimale Systemintegration</p>
+            </div>
+            <div class="interop-item">
+                <div class="interop-image">
+                    <img src="assets/images/victron-wechselrichter.png" alt="Victron Wechselrichter">
+                </div>
+                <h3>Victron Wechselrichter</h3>
+                <p>Leistungsstarke Off-Grid Lösungen</p>
+            </div>
+            <div class="interop-item">
+                <div class="interop-image">
+                    <img src="assets/images/studer-next3.png" alt="Studer Wechselrichter">
+                </div>
+                <h3>Studer Wechselrichter</h3>
+                <p>Professionelle Energiespeichersysteme</p>
+            </div>
+        `;
+    }
+    
+    interopGrid.innerHTML = html;
+}
+
 // Helper functions
 function getSuitableFor(capacity) {
     if (capacity <= 11.5) return '1-2 Pers.';
@@ -275,6 +596,9 @@ function getAutonomy(capacity) {
 // Initialize page
 document.addEventListener('DOMContentLoaded', async function() {
     console.log('Page loading started...');
+    
+    // Show loading skeleton immediately
+    showLoadingSkeleton();
     
     // Load products from API
     await loadProductData();
@@ -295,7 +619,23 @@ document.addEventListener('DOMContentLoaded', async function() {
     if (product) {
         updateProductPage(product);
         console.log('Page updated with product:', product.product_name);
+        
+        // Hide skeleton after content is loaded
+        hideLoadingSkeleton();
     } else {
+        hideLoadingSkeleton();
+        
+        // Show error message if no product found
+        const productInfo = document.querySelector('.product-info-main');
+        if (productInfo) {
+            productInfo.innerHTML = `
+                <h1>Produkt nicht gefunden</h1>
+                <p class="product-tagline">Bitte wählen Sie ein Produkt aus der Navigation.</p>
+                <div class="product-cta-group">
+                    <a href="index.html#produkte" class="btn btn-primary">Zurück zur Übersicht</a>
+                </div>
+            `;
+        }
         console.error('No product found to display');
     }
     
@@ -337,4 +677,90 @@ document.addEventListener('DOMContentLoaded', async function() {
     console.log('Product ID from URL:', productId);
     console.log('Current product:', product);
     console.log('All products:', productsData);
+    
+    // Make clearCache available globally for debugging
+    window.modualClearCache = clearCache;
+    console.log('Tip: Use modualClearCache() in console to clear cache, or add ?refresh=true to URL');
+    
+    // Initialize contact form
+    initContactForm();
+    
+    // Initialize emergency toggle
+    initEmergencyToggle();
 });
+
+// ===========================
+// CONTACT FORM
+// ===========================
+function initContactForm() {
+    const form = document.getElementById('contactForm');
+    if (!form) return;
+    
+    form.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        
+        // Get form data
+        const formData = {
+            name: document.getElementById('name').value,
+            email: document.getElementById('email').value,
+            phone: document.getElementById('phone').value,
+            message: document.getElementById('message').value,
+            newsletter: document.getElementById('newsletter').checked
+        };
+        
+        // Disable submit button
+        const submitBtn = form.querySelector('button[type="submit"]');
+        const originalText = submitBtn.textContent;
+        submitBtn.disabled = true;
+        submitBtn.textContent = 'Wird gesendet...';
+        
+        try {
+            // TODO: Replace with your actual form endpoint
+            // For now, simulate form submission
+            await new Promise(resolve => setTimeout(resolve, 1000));
+            
+            // Log to console (for development)
+            console.log('Form submitted:', formData);
+            
+            // Show success message
+            const successMessage = document.createElement('div');
+            successMessage.className = 'form-success';
+            successMessage.textContent = '✓ Vielen Dank! Wir haben Ihre Nachricht erhalten und melden uns in Kürze.';
+            successMessage.style.padding = '1.5rem';
+            successMessage.style.marginBottom = '2rem';
+            successMessage.style.backgroundColor = '#00c896';
+            successMessage.style.color = 'white';
+            successMessage.style.borderRadius = '8px';
+            successMessage.style.textAlign = 'center';
+            
+            // Insert success message before form
+            form.parentNode.insertBefore(successMessage, form);
+            
+            // Hide form
+            form.style.display = 'none';
+            
+        } catch (error) {
+            console.error('Form submission error:', error);
+            submitBtn.disabled = false;
+            submitBtn.textContent = originalText;
+            alert('Es gab einen Fehler beim Senden. Bitte versuchen Sie es später erneut.');
+        }
+    });
+}
+
+// ===========================
+// EMERGENCY TOGGLE
+// ===========================
+function initEmergencyToggle() {
+    const toggleBtn = document.getElementById('emergencyToggle');
+    const numberLink = document.getElementById('emergencyNumber');
+    
+    if (toggleBtn && numberLink) {
+        toggleBtn.addEventListener('click', function() {
+            if (numberLink.style.display === 'none') {
+                numberLink.style.display = 'inline-flex';
+                toggleBtn.style.display = 'none';
+            }
+        });
+    }
+}

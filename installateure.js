@@ -783,7 +783,7 @@ function toggleMapSize() {
     
     feather.replace();
     
-    // Map neu rendern nach Größenänderung
+    // Map neu rendern nach Grössenänderung
     setTimeout(() => {
         map.invalidateSize();
     }, 300);
