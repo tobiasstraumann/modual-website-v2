@@ -240,30 +240,42 @@ class EnergyChart {
         
         ctx.strokeStyle = color;
         ctx.lineWidth = 3;
-        ctx.beginPath();
+        ctx.lineCap = 'round';
+        ctx.lineJoin = 'round';
         
-        for (let i = 0; i <= this.currentHour; i++) {
-            const x = padding + (barWidth * i) + barWidth / 2;
-            const y = canvas.height - padding - (data[i] / maxValue) * chartHeight;
+        // Draw line segments with smooth opacity fade-in
+        for (let i = 0; i < this.currentHour; i++) {
+            const x1 = padding + (barWidth * i) + barWidth / 2;
+            const y1 = canvas.height - padding - (data[i] / maxValue) * chartHeight;
+            const x2 = padding + (barWidth * (i + 1)) + barWidth / 2;
+            const y2 = canvas.height - padding - (data[i + 1] / maxValue) * chartHeight;
             
-            if (i === 0) {
-                ctx.moveTo(x, y);
-            } else {
-                ctx.lineTo(x, y);
-            }
+            // Smooth opacity for current segment being drawn
+            const segmentOpacity = i < this.currentHour - 1 ? 1 : (this.barOpacity[i + 1] || 0);
+            
+            ctx.globalAlpha = segmentOpacity;
+            ctx.beginPath();
+            ctx.moveTo(x1, y1);
+            ctx.lineTo(x2, y2);
+            ctx.stroke();
         }
         
-        ctx.stroke();
+        ctx.globalAlpha = 1;
         
-        // Draw points
+        // Draw points with smooth fade-in
         ctx.fillStyle = color;
         for (let i = 0; i <= this.currentHour; i++) {
             const x = padding + (barWidth * i) + barWidth / 2;
             const y = canvas.height - padding - (data[i] / maxValue) * chartHeight;
+            const pointOpacity = this.barOpacity[i] || 0;
+            
+            ctx.globalAlpha = pointOpacity;
             ctx.beginPath();
             ctx.arc(x, y, 4, 0, Math.PI * 2);
             ctx.fill();
         }
+        
+        ctx.globalAlpha = 1;
     }
     
     drawBatteryBars() {
@@ -387,21 +399,38 @@ class EnergyChart {
         if (this.isPlaying) return;
         this.isPlaying = true;
         
+        // Start smooth fade-in animation
+        let fadeProgress = 0;
+        const fadeSteps = 10; // Number of fade-in steps per hour
+        const fadeInterval = this.animationSpeed / fadeSteps;
+        
         this.animationInterval = setInterval(() => {
-            this.currentHour++;
-            if (this.currentHour >= 24) {
-                // Animation complete - trigger scenario change
-                this.pause();
-                this.onAnimationComplete();
-                return;
+            fadeProgress++;
+            
+            if (fadeProgress >= fadeSteps) {
+                // Move to next hour
+                fadeProgress = 0;
+                this.currentHour++;
+                
+                if (this.currentHour >= 24) {
+                    // Animation complete - trigger scenario change
+                    this.pause();
+                    this.onAnimationComplete();
+                    return;
+                }
+                
+                // Start fading in the new hour
+                this.barOpacity[this.currentHour] = 0;
             }
             
-            // Fade in current hour bar
-            this.barOpacity[this.currentHour] = 1;
+            // Smooth fade-in for current hour
+            if (this.currentHour < 24) {
+                this.barOpacity[this.currentHour] = Math.min(1, fadeProgress / fadeSteps);
+            }
             
             this.draw();
             this.updateTimeDisplay();
-        }, this.animationSpeed);
+        }, fadeInterval);
     }
     
     pause() {
@@ -454,18 +483,86 @@ class EnergyChart {
                 
                 // Stop auto-loop when user manually selects
                 this.autoLoopEnabled = false;
+                this.updateScenarioIndex(scenario);
                 this.switchScenario(scenario);
                 
                 // Update active tab
-                tabButtons.forEach(t => t.classList.remove('active'));
-                tab.classList.add('active');
+                this.updateActiveTabs();
             });
         });
+        
+        // Setup arrow navigation buttons
+        const prevBtn = document.getElementById('prevScenario');
+        const nextBtn = document.getElementById('nextScenario');
+        
+        if (prevBtn) {
+            prevBtn.addEventListener('click', () => {
+                // Stop auto-loop when user manually navigates
+                this.autoLoopEnabled = false;
+                this.navigateToPreviousScenario();
+            });
+        }
+        
+        if (nextBtn) {
+            nextBtn.addEventListener('click', () => {
+                // Stop auto-loop when user manually navigates
+                this.autoLoopEnabled = false;
+                this.navigateToNextScenario();
+            });
+        }
         
         // Enable auto-loop through scenarios
         this.autoLoopEnabled = true;
         this.scenarios = ['self-consumption', 'peak-shaving', 'blackout'];
         this.currentScenarioIndex = 0;
+    }
+    
+    updateScenarioIndex(scenario) {
+        this.currentScenarioIndex = this.scenarios.indexOf(scenario);
+    }
+    
+    navigateToPreviousScenario() {
+        this.currentScenarioIndex = (this.currentScenarioIndex - 1 + this.scenarios.length) % this.scenarios.length;
+        const prevScenario = this.scenarios[this.currentScenarioIndex];
+        this.switchScenario(prevScenario);
+        this.updateActiveTabs();
+    }
+    
+    navigateToNextScenario() {
+        this.currentScenarioIndex = (this.currentScenarioIndex + 1) % this.scenarios.length;
+        const nextScenario = this.scenarios[this.currentScenarioIndex];
+        this.switchScenario(nextScenario);
+        this.updateActiveTabs();
+    }
+    
+    updateActiveTabs() {
+        const currentScenario = this.scenarios[this.currentScenarioIndex];
+        const tabButtons = document.querySelectorAll('.chart-tab');
+        tabButtons.forEach(tab => {
+            if (tab.dataset.scenario === currentScenario) {
+                tab.classList.add('active');
+            } else {
+                tab.classList.remove('active');
+            }
+        });
+        
+        // Update scenario description
+        this.updateScenarioDescription(currentScenario);
+    }
+    
+    updateScenarioDescription(scenario) {
+        const scenarioTexts = document.querySelectorAll('.scenario-text');
+        scenarioTexts.forEach(text => {
+            if (text.dataset.scenario === scenario) {
+                text.style.display = 'block';
+                // Restart animation
+                text.style.animation = 'none';
+                text.offsetHeight; // Trigger reflow
+                text.style.animation = 'fadeInText 0.5s ease-out forwards';
+            } else {
+                text.style.display = 'none';
+            }
+        });
     }
     
     switchScenario(scenario, isAutoLoop = false) {
@@ -503,15 +600,8 @@ class EnergyChart {
             this.currentScenarioIndex = (this.currentScenarioIndex + 1) % this.scenarios.length;
             const nextScenario = this.scenarios[this.currentScenarioIndex];
             
-            // Update active tab
-            const tabButtons = document.querySelectorAll('.chart-tab');
-            tabButtons.forEach(tab => {
-                if (tab.dataset.scenario === nextScenario) {
-                    tab.classList.add('active');
-                } else {
-                    tab.classList.remove('active');
-                }
-            });
+            // Update active tab and description
+            this.updateActiveTabs();
             
             // Switch to next scenario after brief pause
             setTimeout(() => {
@@ -961,6 +1051,7 @@ class ProductCarousel {
         this.visibleCards = allCards.filter(card => card.dataset.default === 'true');
         this.currentIndex = 0;
         this.cardsToShow = this.getCardsToShow();
+        this.isAnimating = false; // Animation lock
         
         this.init();
     }
@@ -991,13 +1082,85 @@ class ProductCarousel {
     showVisibleCards() {
         // Hide all cards first
         const allCards = Array.from(this.track.children);
-        allCards.forEach(card => card.style.display = 'none');
+        allCards.forEach(card => {
+            card.style.display = 'none';
+            card.style.opacity = '0';
+            card.style.transform = 'translateX(0)';
+        });
         
-        // Show only visible cards
-        this.visibleCards.forEach(card => card.style.display = 'block');
+        // Show only visible cards with animation
+        this.visibleCards.forEach((card, index) => {
+            card.style.display = 'block';
+            // Trigger animation
+            setTimeout(() => {
+                card.style.opacity = '1';
+            }, 50);
+        });
     }
     
-    swapRandomProduct() {
+    slideLeft() {
+        if (this.isAnimating) return; // Prevent multiple animations
+        this.isAnimating = true;
+        
+        // Disable buttons during animation
+        if (this.prevBtn) this.prevBtn.style.pointerEvents = 'none';
+        if (this.nextBtn) this.nextBtn.style.pointerEvents = 'none';
+        
+        // Store current height before animation
+        const trackHeight = this.track.offsetHeight;
+        this.track.style.minHeight = trackHeight + 'px';
+        
+        // Animate out to left
+        this.visibleCards.forEach(card => {
+            card.style.transform = 'translateX(-100%)';
+            card.style.opacity = '0';
+        });
+        
+        setTimeout(() => {
+            this.swapRandomProduct('left');
+            
+            // Reset height and re-enable buttons after animation completes
+            setTimeout(() => {
+                this.track.style.minHeight = '';
+                if (this.prevBtn) this.prevBtn.style.pointerEvents = 'auto';
+                if (this.nextBtn) this.nextBtn.style.pointerEvents = 'auto';
+                this.isAnimating = false;
+            }, 100);
+        }, 500);
+    }
+    
+    slideRight() {
+        if (this.isAnimating) return; // Prevent multiple animations
+        this.isAnimating = true;
+        
+        // Disable buttons during animation
+        if (this.prevBtn) this.prevBtn.style.pointerEvents = 'none';
+        if (this.nextBtn) this.nextBtn.style.pointerEvents = 'none';
+        
+        // Store current height before animation
+        const trackHeight = this.track.offsetHeight;
+        this.track.style.minHeight = trackHeight + 'px';
+        
+        // Animate out to right
+        this.visibleCards.forEach(card => {
+            card.style.transform = 'translateX(100%)';
+            card.style.opacity = '0';
+        });
+        
+        setTimeout(() => {
+            this.swapRandomProduct('right');
+            
+            // Reset height and re-enable buttons after animation completes
+            setTimeout(() => {
+                this.track.style.minHeight = '';
+                if (this.prevBtn) this.prevBtn.style.pointerEvents = 'auto';
+                if (this.nextBtn) this.nextBtn.style.pointerEvents = 'auto';
+                this.isAnimating = false;
+            }, 100);
+        }, 500);
+    }
+    
+    swapRandomProduct(direction = 'left') {
         // Determine which product to swap based on current view
         const isSwappingDC = Math.random() < 0.5;
         const productType = isSwappingDC ? 'dc' : 'ac';
@@ -1005,7 +1168,7 @@ class ProductCarousel {
         
         // Find current visible product of this type
         const currentProductIndex = this.visibleCards.findIndex(card => 
-            card.dataset.type === productType && card.style.display !== 'none'
+            card.dataset.type === productType
         );
         
         if (currentProductIndex === -1) return;
@@ -1015,10 +1178,13 @@ class ProductCarousel {
         if (availableProducts.length === 0) return;
         
         const randomProduct = availableProducts[Math.floor(Math.random() * availableProducts.length)];
-        const currentProduct = this.visibleCards[currentProductIndex];
         
         // Swap the products
         this.visibleCards[currentProductIndex] = randomProduct;
+        
+        // Prepare new card for slide in from opposite direction
+        randomProduct.style.transform = direction === 'left' ? 'translateX(100%)' : 'translateX(-100%)';
+        randomProduct.style.opacity = '0';
         
         // Update display
         this.showVisibleCards();
@@ -1032,11 +1198,11 @@ class ProductCarousel {
     
     setupEventListeners() {
         if (this.prevBtn) {
-            this.prevBtn.addEventListener('click', () => this.swapRandomProduct());
+            this.prevBtn.addEventListener('click', () => this.slideRight());
         }
         
         if (this.nextBtn) {
-            this.nextBtn.addEventListener('click', () => this.swapRandomProduct());
+            this.nextBtn.addEventListener('click', () => this.slideLeft());
         }
         
         // Touch/swipe support
@@ -1054,7 +1220,13 @@ class ProductCarousel {
         this.track.addEventListener('touchend', () => {
             const diff = startX - currentX;
             if (Math.abs(diff) > 50) {
-                this.swapRandomProduct();
+                if (diff > 0) {
+                    // Swiped left - show next
+                    this.slideLeft();
+                } else {
+                    // Swiped right - show previous
+                    this.slideRight();
+                }
             }
         });
     }

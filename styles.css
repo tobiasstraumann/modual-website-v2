@@ -492,18 +492,24 @@ h4 { font-size: 1.25rem; font-weight: 600; }
 
 .section-tag {
     display: inline-block;
-    padding: 0.5rem 1rem;
-    background: var(--background);
+    padding: 0.5rem 1.25rem;
+    background: rgba(46, 94, 252, 0.08);
     color: var(--electric-blue);
-    border-radius: 20px;
-    font-weight: 600;
+    border: 2px solid var(--electric-blue);
+    border-radius: 24px;
+    font-weight: 700;
     font-size: 0.875rem;
     text-transform: uppercase;
+    letter-spacing: 0.05em;
     margin-bottom: 1rem;
+    box-shadow: 0 2px 8px rgba(46, 94, 252, 0.12);
 }
 
 .section-tag.green {
+    background: rgba(0, 200, 150, 0.08);
     color: var(--green);
+    border-color: var(--green);
+    box-shadow: 0 2px 8px rgba(0, 200, 150, 0.12);
 }
 
 /* USPs */
@@ -597,36 +603,120 @@ h4 { font-size: 1.25rem; font-weight: 600; }
     width: 100%;
 }
 
-/* Chart Tabs */
+/* Chart Navigation Wrapper */
+.energy-chart-wrapper {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    position: relative;
+}
+
+.chart-nav-arrow {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    background: var(--white);
+    border: 2px solid rgba(0, 0, 0, 0.1);
+    color: var(--dark-grey);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: var(--transition);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+    flex-shrink: 0;
+}
+
+.chart-nav-arrow:hover {
+    background: var(--electric-blue);
+    color: var(--white);
+    border-color: var(--electric-blue);
+    transform: scale(1.1);
+    box-shadow: 0 4px 16px rgba(46, 94, 252, 0.3);
+}
+
+.chart-nav-arrow:active {
+    transform: scale(0.95);
+}
+
+.chart-nav-arrow i {
+    width: 24px;
+    height: 24px;
+}
+
+.energy-chart-container {
+    flex: 1;
+}
+
+/* Chart Tabs Wrapper (outside dark box) */
+.chart-tabs-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 2rem 0 1.5rem 0;
+}
+
 .chart-tabs {
     display: flex;
-    gap: 0.5rem;
+    gap: 0.75rem;
     flex-wrap: wrap;
+    justify-content: center;
+}
+
+/* Scenario Description */
+.scenario-description {
+    max-width: 800px;
+    margin: 2rem auto 0;
+    text-align: center;
+}
+
+.scenario-text {
+    color: var(--text-secondary);
+    font-size: 1.05rem;
+    line-height: 1.7;
+    margin: 0;
+    opacity: 0;
+    animation: fadeInText 0.5s ease-out forwards;
+}
+
+@keyframes fadeInText {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }
 
 .chart-tab {
-    padding: 0.625rem 1.25rem;
+    padding: 0.75rem 1.5rem;
     background: var(--white);
     color: var(--dark-grey);
-    border: 2px solid transparent;
-    border-radius: 8px;
+    border: 2px solid rgba(0, 0, 0, 0.1);
+    border-radius: 10px;
     font-family: 'Montserrat', sans-serif;
     font-weight: 600;
     cursor: pointer;
     transition: var(--transition);
-    font-size: 0.9rem;
+    font-size: 0.95rem;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
 }
 
 .chart-tab:hover {
-    background: rgba(46, 94, 252, 0.1);
+    background: rgba(46, 94, 252, 0.05);
     border-color: var(--electric-blue);
     color: var(--electric-blue);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(46, 94, 252, 0.15);
 }
 
 .chart-tab.active {
     background: var(--electric-blue);
     color: var(--white);
     border-color: var(--electric-blue);
+    box-shadow: 0 4px 12px rgba(46, 94, 252, 0.3);
 }
 
 /* Subtle pause button below chart */
@@ -640,9 +730,9 @@ h4 { font-size: 1.25rem; font-weight: 600; }
     align-items: center;
     gap: 0.5rem;
     padding: 0.5rem 1rem;
-    background: transparent;
-    color: rgba(0, 0, 0, 0.4);
-    border: 1px solid rgba(0, 0, 0, 0.1);
+    background: rgba(255, 255, 255, 0.5);
+    color: rgba(0, 0, 0, 0.6);
+    border: 1px solid rgba(0, 0, 0, 0.15);
     border-radius: 6px;
     font-family: 'Montserrat', sans-serif;
     font-weight: 500;
@@ -652,18 +742,19 @@ h4 { font-size: 1.25rem; font-weight: 600; }
 }
 
 .chart-pause-btn:hover {
-    background: rgba(0, 0, 0, 0.03);
-    color: rgba(0, 0, 0, 0.6);
-    border-color: rgba(0, 0, 0, 0.2);
+    background: rgba(255, 255, 255, 0.7);
+    color: rgba(0, 0, 0, 0.8);
+    border-color: rgba(0, 0, 0, 0.25);
 }
 
 .chart-pause-btn.playing {
     color: var(--electric-blue);
     border-color: var(--electric-blue);
+    background: rgba(46, 94, 252, 0.1);
 }
 
 .chart-pause-btn.playing:hover {
-    background: rgba(46, 94, 252, 0.05);
+    background: rgba(46, 94, 252, 0.15);
 }
 
 .pause-icon {
@@ -704,14 +795,15 @@ h4 { font-size: 1.25rem; font-weight: 600; }
     position: absolute;
     top: 20px;
     right: 20px;
-    background: rgba(255, 255, 255, 0.95);
+    background: rgba(255, 255, 255, 0.98);
     padding: 1rem 1.5rem;
     border-radius: 12px;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 6px 24px rgba(0, 0, 0, 0.15);
     display: flex;
     flex-direction: column;
     align-items: center;
     gap: 0.5rem;
+    border: 2px solid rgba(0, 0, 0, 0.05);
 }
 
 #currentTime {
@@ -723,6 +815,7 @@ h4 { font-size: 1.25rem; font-weight: 600; }
 #timeOfDay {
     font-size: 1rem;
     font-weight: 500;
+    color: rgba(0, 0, 0, 0.7);
 }
 
 /* Cost Comparison */
@@ -1574,24 +1667,47 @@ h4 { font-size: 1.25rem; font-weight: 600; }
 
 /* Featured Products - Sensirion Style */
 .featured-products {
-    margin-top: 3rem;
+    margin-top: 6rem;
+}
+
+.featured-products .section-header {
+    text-align: center;
+    margin-bottom: 3rem;
+}
+
+.featured-products .section-header p {
+    color: var(--text-secondary);
+    font-size: 1.1rem;
+    margin-top: 1rem;
+    max-width: 600px;
+    margin-left: auto;
+    margin-right: auto;
 }
 
 /* Product Carousel */
 .product-carousel-container {
     position: relative;
     margin-bottom: 2rem;
+    max-width: 1200px;
+    margin-left: auto;
+    margin-right: auto;
 }
 
 .product-carousel {
     overflow: hidden;
     padding: 1rem 0;
+    min-height: 700px;
+    position: relative;
+    transition: min-height 0.3s ease;
 }
 
 .carousel-track {
     display: flex;
     gap: 2rem;
-    transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+    transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+    justify-content: center;
+    position: relative;
+    min-height: 650px;
 }
 
 .carousel-nav {
@@ -1682,11 +1798,12 @@ h4 { font-size: 1.25rem; font-weight: 600; }
     background: rgba(255, 255, 255, 0.5);
     border-radius: 16px;
     overflow: hidden;
-    transition: var(--transition);
+    transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
     border: 1px solid rgba(0, 0, 0, 0.05);
     flex-shrink: 0;
     width: 100%;
     max-width: 500px;
+    opacity: 1;
 }
 
 .featured-product-card:hover {
@@ -2440,6 +2557,20 @@ h4 { font-size: 1.25rem; font-weight: 600; }
         grid-template-columns: 1fr;
     }
     
+    .energy-chart-wrapper {
+        gap: 0.75rem;
+    }
+    
+    .chart-nav-arrow {
+        width: 40px;
+        height: 40px;
+    }
+    
+    .chart-nav-arrow i {
+        width: 20px;
+        height: 20px;
+    }
+    
     .energy-chart-container {
         padding: 1.5rem;
     }
@@ -2449,15 +2580,31 @@ h4 { font-size: 1.25rem; font-weight: 600; }
         align-items: flex-start;
     }
     
+    .chart-tabs-wrapper {
+        margin: 1.5rem 0 1rem 0;
+    }
+    
     .chart-tabs {
         width: 100%;
         gap: 0.5rem;
+        flex-direction: column;
+    }
+    
+    .scenario-description {
+        margin: 1.5rem 1rem 0;
+        padding: 0 0.5rem;
+    }
+    
+    .scenario-text {
+        font-size: 0.95rem;
+        line-height: 1.6;
     }
     
     .chart-tab {
-        flex: 1;
-        font-size: 0.8rem;
-        padding: 0.5rem 0.75rem;
+        width: 100%;
+        font-size: 0.85rem;
+        padding: 0.65rem 1rem;
+        justify-content: center;
     }
     
     .chart-pause-btn {
@@ -2511,6 +2658,31 @@ h4 { font-size: 1.25rem; font-weight: 600; }
     
     .featured-product-card {
         max-width: 100%;
+    }
+    
+    .featured-products {
+        margin-top: 4rem;
+    }
+    
+    .featured-products .section-header {
+        margin-bottom: 2rem;
+    }
+    
+    .featured-products .section-header p {
+        font-size: 1rem;
+        padding: 0 1rem;
+    }
+    
+    .product-carousel-container {
+        padding: 0 1rem;
+    }
+    
+    .product-carousel {
+        min-height: 750px;
+    }
+    
+    .carousel-track {
+        min-height: 700px;
     }
     
     .featured-products-grid {

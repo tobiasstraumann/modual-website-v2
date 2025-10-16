@@ -282,29 +282,50 @@
     <section id="produkte" class="products">
         <div class="container">
             <div class="section-header">
-                <span class="section-tag">Produkte</span>
+                <span class="section-tag">Herausforderungen</span>
                 <h2>Der Nutzen eines Batteriespeichers</h2>
                 <p>Tag laden, Nacht entladen - intelligent und effizient</p>
             </div>
             
-            <!-- Interactive Energy Chart -->
-            <div class="energy-chart-container">
-                <div class="chart-header">
-                    <h3>24-Stunden Energiefluss</h3>
-                    <!-- Scenario Tabs -->
-                    <div class="chart-tabs">
-                        <button class="chart-tab active" data-scenario="self-consumption">
-                            ▶ Eigenverbrauchsoptimierung
-                        </button>
-                        <button class="chart-tab" data-scenario="peak-shaving">
-                            ⚡ Peak-Shaving
-                        </button>
-                        <button class="chart-tab" data-scenario="blackout">
-                            🔋 Schwarzstartfähigkeit
-                        </button>
-                    </div>
+            <!-- Scenario Tabs (outside container) -->
+            <div class="chart-tabs-wrapper">
+                <div class="chart-tabs">
+                    <button class="chart-tab active" data-scenario="self-consumption">
+                        ▶ Eigenverbrauchsoptimierung
+                    </button>
+                    <button class="chart-tab" data-scenario="peak-shaving">
+                        ⚡ Peak-Shaving
+                    </button>
+                    <button class="chart-tab" data-scenario="blackout">
+                        🔋 Schwarzstartfähigkeit
+                    </button>
                 </div>
-                <div class="energy-chart">
+                
+                <!-- Scenario Description -->
+                <div class="scenario-description" id="scenarioDescription">
+                    <p class="scenario-text" data-scenario="self-consumption">
+                        Maximieren Sie Ihren Eigenverbrauch von selbst produziertem Solarstrom. Laden Sie die Batterie tagsüber mit überschüssiger Solarenergie und nutzen Sie diese in der Nacht – für maximale Unabhängigkeit vom Stromnetz.
+                    </p>
+                    <p class="scenario-text" data-scenario="peak-shaving" style="display: none;">
+                        Reduzieren Sie Spitzenlasten und senken Sie Ihre Stromkosten. Die Batterie entlädt gezielt während teurer Hochlastzeiten und lädt in günstigen Niedriglastphasen – ideal für Gewerbe und Industrie.
+                    </p>
+                    <p class="scenario-text" data-scenario="blackout" style="display: none;">
+                        Bleiben Sie auch bei Stromausfall autark. Im Notfall übernimmt die Batterie sofort die Versorgung kritischer Geräte. Mit Solarunterstützung verlängern Sie die Notstromkapazität erheblich.
+                    </p>
+                </div>
+            </div>
+            
+            <!-- Interactive Energy Chart with Navigation -->
+            <div class="energy-chart-wrapper">
+                <button class="chart-nav-arrow chart-nav-prev" id="prevScenario" aria-label="Vorheriges Szenario">
+                    <i data-feather="chevron-left"></i>
+                </button>
+                
+                <div class="energy-chart-container">
+                    <div class="chart-header">
+                        <h3>24-Stunden Energiefluss</h3>
+                    </div>
+                    <div class="energy-chart">
                     <canvas id="energyCanvas" width="1000" height="400"></canvas>
                     <div class="chart-legend">
                         <div class="legend-item">
@@ -331,9 +352,19 @@
                         </button>
                     </div>
                 </div>
+                </div>
+                
+                <button class="chart-nav-arrow chart-nav-next" id="nextScenario" aria-label="Nächstes Szenario">
+                    <i data-feather="chevron-right"></i>
+                </button>
             </div>
             
             <div class="featured-products">
+                <div class="section-header">
+                    <span class="section-tag">Produkte</span>
+                    <h2>Unsere Lösungen</h2>
+                    <p>Modulare Batteriespeicher für jede Anforderung – Swiss Made Qualität</p>
+                </div>
                 <div class="product-carousel-container">
                     <button class="carousel-nav carousel-prev" aria-label="Previous">
                         <i data-feather="chevron-left"></i>
