@@ -14,21 +14,42 @@ class EnergyChart {
         this.animationInterval = null;
         this.barOpacity = {}; // Track opacity for each hour
         this.autoPlay = true; // Auto-play on load
+        this.currentScenario = 'self-consumption'; // Default scenario
         
-        // Colors
+        // Colors (updated with dark grey instead of green)
         this.colors = {
             solar: '#fbba00',
             battery: '#2e5efc',
-            consumption: '#00c896',
+            consumption: '#404042', // Dark grey instead of green
             grid: '#cccccc'
         };
         
-        // Data for 24 hours (0-23)
-        this.solarData = this.generateSolarData();
-        this.consumptionData = this.generateConsumptionData();
-        this.batteryData = this.generateBatteryData();
+        // Initialize scenario data
+        this.loadScenario(this.currentScenario);
         
         this.init();
+    }
+    
+    loadScenario(scenario) {
+        this.currentScenario = scenario;
+        
+        switch(scenario) {
+            case 'self-consumption':
+                this.solarData = this.generateSolarData();
+                this.consumptionData = this.generateConsumptionData();
+                this.batteryData = this.generateBatteryData();
+                break;
+            case 'peak-shaving':
+                this.solarData = this.generateSolarData();
+                this.consumptionData = this.generatePeakShavingConsumption();
+                this.batteryData = this.generatePeakShavingBattery();
+                break;
+            case 'blackout':
+                this.solarData = this.generateBlackoutSolar();
+                this.consumptionData = this.generateBlackoutConsumption();
+                this.batteryData = this.generateBlackoutBattery();
+                break;
+        }
     }
     
     generateSolarData() {
@@ -62,6 +83,85 @@ class EnergyChart {
             const consumption = this.consumptionData[hour];
             const diff = solar - consumption;
             data.push(Math.max(-50, Math.min(50, diff)));
+        }
+        return data;
+    }
+    
+    // Peak-Shaving Scenario: Reduce peak demand
+    generatePeakShavingConsumption() {
+        // Industrial load with high peaks at business hours
+        const data = [15, 15, 15, 15, 20, 30, 60, 85, 95, 100, 95, 90,
+                      85, 95, 100, 95, 85, 70, 45, 30, 25, 20, 15, 15];
+        return data;
+    }
+    
+    generatePeakShavingBattery() {
+        // Battery discharges during peak hours to reduce load
+        const data = [];
+        for (let hour = 0; hour < 24; hour++) {
+            const consumption = this.consumptionData[hour];
+            const solar = this.solarData[hour];
+            
+            // Charge when solar available, discharge during peaks
+            if (consumption > 80 && hour >= 8 && hour <= 17) {
+                // Discharge during peak hours
+                data.push(-40);
+            } else if (solar > consumption && solar > 50) {
+                // Charge when excess solar
+                data.push(30);
+            } else {
+                data.push(0);
+            }
+        }
+        return data;
+    }
+    
+    // Blackout Scenario: Emergency backup power
+    generateBlackoutSolar() {
+        // Solar still producing during day (if sunny)
+        const data = [];
+        for (let hour = 0; hour < 24; hour++) {
+            if (hour >= 6 && hour <= 20) {
+                const peak = 13;
+                const distance = Math.abs(hour - peak);
+                const value = Math.max(0, 90 - (distance * distance * 2));
+                data.push(value);
+            } else {
+                data.push(0);
+            }
+        }
+        return data;
+    }
+    
+    generateBlackoutConsumption() {
+        // Emergency load: Critical appliances only (reduced consumption)
+        // Blackout occurs at hour 14
+        const data = [30, 25, 20, 18, 18, 22, 40, 55, 45, 38, 35, 35,
+                      38, 35, 25, 25, 25, 25, 28, 30, 28, 35, 30, 28];
+        return data;
+    }
+    
+    generateBlackoutBattery() {
+        // Battery provides backup power during blackout (hour 14 onwards)
+        const data = [];
+        for (let hour = 0; hour < 24; hour++) {
+            const solar = this.solarData[hour];
+            const consumption = this.consumptionData[hour];
+            
+            if (hour >= 14) {
+                // During blackout: battery provides power + solar helps if available
+                if (solar > 0) {
+                    const diff = solar - consumption;
+                    data.push(Math.max(-45, Math.min(30, diff)));
+                } else {
+                    // Night: battery discharges
+                    data.push(-25);
+                }
+            } else {
+                // Before blackout: normal charging
+                const diff = solar - consumption;
+                data.push(Math.max(-30, Math.min(50, diff)));
+            }
         }
         return data;
     }
@@ -182,15 +282,21 @@ class EnergyChart {
             const x = padding + (barWidth * i);
             const value = this.batteryData[i];
             const barHeight = (Math.abs(value) / maxValue) * (chartHeight / 3);
-            const y = value > 0 ? centerY - barHeight : centerY;
             
-            // Fade in effect for new bars
-            if (this.barOpacity[i] < 1) {
-                this.barOpacity[i] = Math.min(1, this.barOpacity[i] + 0.1);
+            // Use barOpacity for current hour
+            const opacity = this.barOpacity[i] || 0;
+            
+            if (Math.abs(value) > 0) {
+                ctx.globalAlpha = 0.4 * opacity;
+                
+                if (value > 0) {
+                    // Charging: bar goes upward
+                    ctx.fillRect(x, centerY - barHeight, barWidth - 2, barHeight);
+                } else {
+                    // Discharging: bar goes downward
+                    ctx.fillRect(x, centerY, barWidth - 2, barHeight);
+                }
             }
-            
-            ctx.globalAlpha = 0.3 * this.barOpacity[i];
-            ctx.fillRect(x, y, barWidth - 2, Math.abs(value) > 0 ? barHeight : 0);
         }
         
         ctx.globalAlpha = 1;
@@ -284,13 +390,15 @@ class EnergyChart {
         this.animationInterval = setInterval(() => {
             this.currentHour++;
             if (this.currentHour >= 24) {
-                // Loop back to start
-                this.currentHour = 0;
-                // Reset bar opacities for smooth fade-in on next cycle
-                for (let i = 0; i < 24; i++) {
-                    this.barOpacity[i] = 0;
-                }
+                // Animation complete - trigger scenario change
+                this.pause();
+                this.onAnimationComplete();
+                return;
             }
+            
+            // Fade in current hour bar
+            this.barOpacity[this.currentHour] = 1;
+            
             this.draw();
             this.updateTimeDisplay();
         }, this.animationSpeed);
@@ -316,20 +424,99 @@ class EnergyChart {
     }
     
     setupControls() {
-        const playBtn = document.getElementById('playChart');
         const pauseBtn = document.getElementById('pauseChart');
-        const resetBtn = document.getElementById('resetChart');
         
-        if (playBtn) {
-            playBtn.addEventListener('click', () => this.play());
-        }
-        
+        // Pause button toggles play/pause
         if (pauseBtn) {
-            pauseBtn.addEventListener('click', () => this.pause());
+            pauseBtn.addEventListener('click', () => {
+                if (this.isPlaying) {
+                    this.pause();
+                    pauseBtn.classList.remove('playing');
+                    pauseBtn.innerHTML = '<span class="pause-icon">▶</span> Fortsetzen';
+                } else {
+                    this.play();
+                    pauseBtn.classList.add('playing');
+                    pauseBtn.innerHTML = '<span class="pause-icon">⏸</span> Pause';
+                }
+            });
+            
+            // Set initial state
+            if (this.isPlaying) {
+                pauseBtn.classList.add('playing');
+            }
         }
         
-        if (resetBtn) {
-            resetBtn.addEventListener('click', () => this.reset());
+        // Setup scenario tabs (manual switching disabled during auto-loop)
+        const tabButtons = document.querySelectorAll('.chart-tab');
+        tabButtons.forEach(tab => {
+            tab.addEventListener('click', () => {
+                const scenario = tab.dataset.scenario;
+                
+                // Stop auto-loop when user manually selects
+                this.autoLoopEnabled = false;
+                this.switchScenario(scenario);
+                
+                // Update active tab
+                tabButtons.forEach(t => t.classList.remove('active'));
+                tab.classList.add('active');
+            });
+        });
+        
+        // Enable auto-loop through scenarios
+        this.autoLoopEnabled = true;
+        this.scenarios = ['self-consumption', 'peak-shaving', 'blackout'];
+        this.currentScenarioIndex = 0;
+    }
+    
+    switchScenario(scenario, isAutoLoop = false) {
+        // Pause current animation
+        this.pause();
+        
+        // Load new scenario data
+        this.loadScenario(scenario);
+        
+        // Reset animation
+        this.currentHour = 0;
+        for (let i = 0; i < 24; i++) {
+            this.barOpacity[i] = 0;
+        }
+        
+        // Redraw and restart
+        this.draw();
+        this.updateTimeDisplay();
+        
+        // Update pause button
+        const pauseBtn = document.getElementById('pauseChart');
+        if (pauseBtn) {
+            pauseBtn.classList.add('playing');
+            pauseBtn.innerHTML = '<span class="pause-icon">⏸</span> Pause';
+        }
+        
+        // Auto-play new scenario
+        setTimeout(() => this.play(), 500);
+    }
+    
+    onAnimationComplete() {
+        // Called when animation reaches hour 23
+        if (this.autoLoopEnabled) {
+            // Move to next scenario
+            this.currentScenarioIndex = (this.currentScenarioIndex + 1) % this.scenarios.length;
+            const nextScenario = this.scenarios[this.currentScenarioIndex];
+            
+            // Update active tab
+            const tabButtons = document.querySelectorAll('.chart-tab');
+            tabButtons.forEach(tab => {
+                if (tab.dataset.scenario === nextScenario) {
+                    tab.classList.add('active');
+                } else {
+                    tab.classList.remove('active');
+                }
+            });
+            
+            // Switch to next scenario after brief pause
+            setTimeout(() => {
+                this.switchScenario(nextScenario, true);
+            }, 1500);
         }
     }
 }
@@ -528,27 +715,108 @@ function updateCostCalculator() {
 // Removed duplicate class definition - see line 731 for active implementation
 
 // ===========================
-// CONTACT FORM
+// PROGRESSIVE CONTACT FORM
 // ===========================
 
 function initContactForm() {
     const form = document.getElementById('contactForm');
     if (!form) return;
     
+    const formToggle = document.getElementById('formToggle');
+    const expandableFields = document.getElementById('expandableFields');
+    const formTitle = document.getElementById('formTitle');
+    const formSubtitle = document.getElementById('formSubtitle');
+    const submitBtn = document.getElementById('submitBtn');
+    const toggleText = document.getElementById('toggleText');
+    const formIcon = document.querySelector('.contact-icon-large i');
+    
+    // Progressive form toggle
+    if (formToggle && expandableFields) {
+        formToggle.addEventListener('click', function() {
+            const currentState = form.dataset.state;
+            
+            if (currentState === 'newsletter') {
+                // Switch to contact mode
+                form.dataset.state = 'contact';
+                expandableFields.style.display = 'flex';
+                
+                // Trigger reflow for animation
+                expandableFields.offsetHeight;
+                expandableFields.classList.add('expanded');
+                
+                // Update header
+                formTitle.textContent = 'Direkt kontaktieren';
+                formSubtitle.textContent = 'Haben Sie Fragen? Schreiben Sie uns direkt';
+                
+                // Update submit button
+                submitBtn.textContent = 'Nachricht senden';
+                
+                // Update icon
+                if (formIcon) {
+                    formIcon.setAttribute('data-feather', 'message-circle');
+                    if (typeof feather !== 'undefined') {
+                        feather.replace();
+                    }
+                }
+                
+                // Make name and message required in contact mode
+                document.getElementById('name').required = true;
+                document.getElementById('message').required = true;
+                
+            } else {
+                // Switch back to newsletter mode
+                form.dataset.state = 'newsletter';
+                expandableFields.classList.remove('expanded');
+                
+                setTimeout(() => {
+                    expandableFields.style.display = 'none';
+                }, 400); // Match CSS transition duration
+                
+                // Update header
+                formTitle.textContent = 'Bleiben Sie auf dem Laufenden';
+                formSubtitle.textContent = 'Erhalten Sie Updates zu neuen Produkten und Angeboten';
+                
+                // Update submit button
+                submitBtn.textContent = 'Anmelden';
+                
+                // Update icon
+                if (formIcon) {
+                    formIcon.setAttribute('data-feather', 'mail');
+                    if (typeof feather !== 'undefined') {
+                        feather.replace();
+                    }
+                }
+                
+                // Remove required from extra fields
+                document.getElementById('name').required = false;
+                document.getElementById('message').required = false;
+            }
+        });
+    }
+    
+    // Form submission
     form.addEventListener('submit', async (e) => {
         e.preventDefault();
         
-        // Get form data
-        const formData = {
-            name: document.getElementById('name').value,
-            email: document.getElementById('email').value,
-            phone: document.getElementById('phone').value,
-            message: document.getElementById('message').value,
-            newsletter: document.getElementById('newsletter').checked
+        const currentState = form.dataset.state;
+        const email = document.getElementById('email').value;
+        
+        let formData = {
+            email: email,
+            type: currentState
         };
         
+        // Add extra fields if in contact mode
+        if (currentState === 'contact') {
+            formData.name = document.getElementById('name').value;
+            formData.phone = document.getElementById('phone').value || '';
+            formData.message = document.getElementById('message').value;
+            formData.newsletter = document.getElementById('newsletter').checked;
+        } else {
+            formData.newsletter = true;
+        }
+        
         // Disable submit button
-        const submitBtn = form.querySelector('button[type="submit"]');
         const originalText = submitBtn.textContent;
         submitBtn.disabled = true;
         submitBtn.textContent = 'Wird gesendet...';
@@ -564,7 +832,12 @@ function initContactForm() {
             // Show success message
             const successMessage = document.createElement('div');
             successMessage.className = 'form-success';
-            successMessage.textContent = '✓ Vielen Dank! Wir haben Ihre Nachricht erhalten und melden uns in Kürze.';
+            
+            if (currentState === 'newsletter') {
+                successMessage.textContent = '✓ Vielen Dank! Sie wurden erfolgreich für unseren Newsletter angemeldet.';
+            } else {
+                successMessage.textContent = '✓ Vielen Dank! Wir haben Ihre Nachricht erhalten und melden uns in Kürze.';
+            }
             
             // Insert success message before form
             form.parentNode.insertBefore(successMessage, form);
@@ -577,26 +850,26 @@ function initContactForm() {
                 successMessage.remove();
                 form.style.display = 'flex';
                 form.reset();
+                
+                // Reset to newsletter mode
+                if (currentState === 'contact') {
+                    expandableFields.classList.remove('expanded');
+                    expandableFields.style.display = 'none';
+                    form.dataset.state = 'newsletter';
+                    formTitle.textContent = 'Bleiben Sie auf dem Laufenden';
+                    formSubtitle.textContent = 'Erhalten Sie Updates zu neuen Produkten und Angeboten';
+                    submitBtn.textContent = 'Anmelden';
+                    if (formIcon) {
+                        formIcon.setAttribute('data-feather', 'mail');
+                        if (typeof feather !== 'undefined') {
+                            feather.replace();
+                        }
+                    }
+                }
+                
                 submitBtn.disabled = false;
                 submitBtn.textContent = originalText;
             }, 5000);
-            
-            // TODO: If using a real backend, replace the above with:
-            /*
-            const response = await fetch('YOUR_FORM_ENDPOINT', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(formData)
-            });
-            
-            if (response.ok) {
-                // Show success message
-            } else {
-                throw new Error('Form submission failed');
-            }
-            */
             
         } catch (error) {
             console.error('Form submission error:', error);

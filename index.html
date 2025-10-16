@@ -291,10 +291,17 @@
             <div class="energy-chart-container">
                 <div class="chart-header">
                     <h3>24-Stunden Energiefluss</h3>
-                    <div class="chart-controls">
-                        <button class="chart-btn" id="playChart">▶ Abspielen</button>
-                        <button class="chart-btn" id="pauseChart">⏸ Pause</button>
-                        <button class="chart-btn" id="resetChart">↻ Zurücksetzen</button>
+                    <!-- Scenario Tabs -->
+                    <div class="chart-tabs">
+                        <button class="chart-tab active" data-scenario="self-consumption">
+                            ▶ Eigenverbrauchsoptimierung
+                        </button>
+                        <button class="chart-tab" data-scenario="peak-shaving">
+                            ⚡ Peak-Shaving
+                        </button>
+                        <button class="chart-tab" data-scenario="blackout">
+                            🔋 Schwarzstartfähigkeit
+                        </button>
                     </div>
                 </div>
                 <div class="energy-chart">
@@ -309,13 +316,19 @@
                             <span>Batterie Ladung</span>
                         </div>
                         <div class="legend-item">
-                            <span class="legend-color" style="background: var(--green);"></span>
+                            <span class="legend-color" style="background: var(--dark-grey);"></span>
                             <span>Verbrauch</span>
                         </div>
                     </div>
                     <div class="time-indicator">
                         <span id="currentTime">00:00</span>
                         <span id="timeOfDay">🌙 Nacht</span>
+                    </div>
+                    <!-- Pause Button (subtle, below chart) -->
+                    <div class="chart-pause-wrapper">
+                        <button class="chart-pause-btn" id="pauseChart">
+                            <span class="pause-icon">⏸</span> Pause
+                        </button>
                     </div>
                 </div>
             </div>
@@ -850,34 +863,52 @@
     <section class="contact-form-section">
         <div class="contact-form-container">
             <div class="contact-form-wrapper">
+                <!-- Form Header - Changes based on state -->
                 <div class="contact-form-header">
-                    <div class="contact-icon-large"><i data-feather="message-circle"></i></div>
-                    <h2>Direkt kontaktieren</h2>
-                    <p>Haben Sie Fragen? Schreiben Sie uns direkt</p>
+                    <div class="contact-icon-large"><i data-feather="mail"></i></div>
+                    <h2 id="formTitle">Bleiben Sie auf dem Laufenden</h2>
+                    <p id="formSubtitle">Erhalten Sie Updates zu neuen Produkten und Angeboten</p>
                 </div>
-                <form class="contact-form" id="contactForm">
-                    <div class="form-row">
-                        <div class="form-group">
-                            <input type="text" id="name" name="name" placeholder="Name *" required>
+                
+                <!-- Progressive Form -->
+                <form class="contact-form contact-form-progressive" id="contactForm" data-state="newsletter">
+                    <!-- Primary inline row: Email + Submit -->
+                    <div class="form-inline-primary">
+                        <input type="email" id="email" name="email" placeholder="Ihre E-Mail-Adresse *" required>
+                        <button type="submit" class="btn btn-submit" id="submitBtn">Anmelden</button>
+                    </div>
+                    
+                    <!-- Expandable Contact Fields -->
+                    <div class="form-expandable" id="expandableFields" style="display: none;">
+                        <!-- Secondary inline row: Name + Phone -->
+                        <div class="form-inline-secondary">
+                            <input type="text" id="name" name="name" placeholder="Name *">
+                            <input type="tel" id="phone" name="phone" placeholder="Telefon (optional)">
                         </div>
+                        
+                        <!-- Message textarea -->
                         <div class="form-group">
-                            <input type="email" id="email" name="email" placeholder="E-Mail *" required>
+                            <textarea id="message" name="message" rows="4" placeholder="Ihre Nachricht *"></textarea>
+                        </div>
+                        
+                        <!-- Newsletter checkbox for contact mode -->
+                        <div class="form-group checkbox-group">
+                            <label class="checkbox-label">
+                                <input type="checkbox" id="newsletter" name="newsletter" checked>
+                                <span>Newsletter abonnieren und auf dem Laufenden bleiben</span>
+                            </label>
                         </div>
                     </div>
-                    <div class="form-group">
-                        <input type="tel" id="phone" name="phone" placeholder="Telefon (optional)">
+                    
+                    <!-- Toggle Link -->
+                    <div class="form-toggle-wrapper">
+                        <button type="button" class="form-toggle-link" id="formToggle">
+                            <i data-feather="message-circle"></i>
+                            <span id="toggleText">Haben Sie eine Frage? Nachricht schreiben</span>
+                        </button>
                     </div>
-                    <div class="form-group">
-                        <textarea id="message" name="message" rows="5" placeholder="Ihre Nachricht *" required></textarea>
-                    </div>
-                    <div class="form-group checkbox-group">
-                        <label class="checkbox-label">
-                            <input type="checkbox" id="newsletter" name="newsletter">
-                            <span>Newsletter abonnieren und auf dem Laufenden bleiben</span>
-                        </label>
-                    </div>
-                    <button type="submit" class="btn btn-submit">Nachricht senden</button>
                 </form>
+                <!-- Contact Info Footer -->
                 <div class="contact-info-footer">
                     <p>Oder rufen Sie uns direkt an</p>
                     <div class="contact-methods-inline">
